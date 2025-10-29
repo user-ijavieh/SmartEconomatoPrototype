@@ -11,33 +11,39 @@ import { getProducts , getSuppliers , getCategories } from '../services/apiServi
 
 import { manejarBusqueda,manejarFiltro,manejarOrden,manejarStock,manejarMostrarTodos } from '../utils/funciones.js';
 
+
+//* Definición de todas las acciones en cada evento
+
+const acciones = {
+    btnBuscar: () => {
+        const resultadoBusqueda = manejarBusqueda(productosMostrados, inputBusqueda);
+        renderizarTabla(resultadoBusqueda ? resultadoBusqueda : [], tabla, resumen);
+    },
+    btnFiltarCategoria: () => {
+        const resultadoFiltro = manejarFiltro(productosMostrados,selectCategoria);
+        renderizarTabla(resultadoFiltro ? resultadoFiltro : [], tabla, resumen);
+    },
+    btnOrdenar: () => {
+        const resultadoOrdenar = manejarOrden(productosMostrados,selectOrden)
+        renderizarTabla(resultadoOrdenar ? resultadoOrdenar : [], tabla, resumen);
+    },
+    btnStock: () => {
+        const resultadoStock = manejarStock(productosMostrados)
+        renderizarTabla(resultadoStock ? resultadoStock : [], tabla, resumen);
+    },
+    btnMostrarTodos: () => {
+        const resultadoMostrar = manejarMostrarTodos(selectCategoria,inputBusqueda,productosMostrados);
+        renderizarTabla(resultadoMostrar ? resultadoMostrar : [], tabla, resumen);
+    }
+}
+
 //* Controlador de eventos
 
 controles.addEventListener('click', (e) => {
-    const id = e.target.id;
-    switch (id) {
-        case 'btnBuscar':
-            const resultadoBusqueda = manejarBusqueda(productosMostrados, inputBusqueda);
-            renderizarTabla(resultadoBusqueda ? resultadoBusqueda : [], tabla, resumen);
-            break;
-        case 'btnFiltrarCategoria':
-            const resultadoFiltro = manejarFiltro(productosMostrados,selectCategoria);
-            renderizarTabla(resultadoFiltro ? resultadoFiltro : [], tabla, resumen);
-            break;
-        case 'btnOrdenar':
-            const resultadoOrdenar = manejarOrden(productosMostrados,selectOrden)
-            renderizarTabla(resultadoOrdenar ? resultadoOrdenar : [], tabla, resumen);
-            break;
-        case 'btnStock':
-            const resultadoStock = manejarStock(productosMostrados)
-            renderizarTabla(resultadoStock ? resultadoStock : [], tabla, resumen);
-            break;
-        case 'btnMostrarTodos':
-            const resultadoMostrar = manejarMostrarTodos(selectCategoria,inputBusqueda,productosMostrados);
-            renderizarTabla(resultadoMostrar ? resultadoMostrar : [], tabla, resumen);
-            break;
-    }
+    const accion = acciones[e.target.id];
+    if (accion) accion();
 });
+
 
 
 //* Método para cargar todos los productos
