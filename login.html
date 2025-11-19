@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/css/login.css">
+    <link rel="stylesheet" href="assets/css/transitions.css">
+    <title>Login</title>
+</head>
+<body>
+    <div class="container">
+        <div class="title">
+            <h1>Smart Economato</h1>
+        </div>
+        <div class="login">
+            <div id="loginMessage" class="login-message" style="display: none;"></div>
+            <form id="loginForm">
+                <label for="txtUser">Usuario:</label>
+                <input type="text" id="txtUser" placeholder="admin">
+                <label for="txtPassword">Contraseña:</label>
+                <input type="password" id="txtPassword" placeholder=" *********">
+                <input type="submit" value="Entrar">
+            </form>
+        </div>
+        <div class="logos">
+            <img src="assets/img/logoGobCan.png" alt="logoGobCan">
+            <img src="assets/img/Candelaria.svg" alt="logoCandelaria">
+        </div>
+    </div>
+    <script type="module" src="src/controllers/loginController.js"></script>
+    <script src="src/view/transition.js"></script>
+</body>
+</html>
