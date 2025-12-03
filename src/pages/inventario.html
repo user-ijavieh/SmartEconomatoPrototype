@@ -1,155 +1,100 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Smart Economato - Inventario</title>
-  <link rel="stylesheet" href="../../assets/css/inventario.css">
-  <link rel="stylesheet" href="../../assets/css/transitions.css">
-</head>
-<body>
-  <!-- Sidebar -->
-  <aside class="sidebar collapsed">
-    <div class="sidebar-header">
-      <img src="../../assets/img/Candelaria.svg" alt="Logo" class="sidebar-logo">
-      <h2>Smart Economato</h2>
-      <button class="btn-toggle-sidebar">☰</button>
-    </div>
+<!-- Contenido Inventario -->
+<link rel="stylesheet" href="../../assets/css/inventario.css">
 
-    <nav class="sidebar-nav">
-      <a href="./welcomePage.html" class="sidebar-item">
-        <img src="../../assets/img/house.svg" alt="Inicio" class="sidebar-icon">
-        <span class="sidebar-text">Inicio</span>
-      </a>
-      <a href="./inventario.html" class="sidebar-item active">
-        <img src="../../assets/img/inventory.svg" alt="Inventario" class="sidebar-icon">
-        <span class="sidebar-text">Inventario</span>
-      </a>
-      <a href="#" class="sidebar-item">
-        <img src="../../assets/img/truck.svg" alt="Pedidos" class="sidebar-icon">
-        <span class="sidebar-text">Pedidos</span>
-      </a>
-      <a href="#" class="sidebar-item">
-        <img src="../../assets/img/history.svg" alt="Reportes" class="sidebar-icon">
-        <span class="sidebar-text">Reportes</span>
-      </a>
-      <a href="#" class="sidebar-item">
-        <img src="../../assets/img/recipe.svg" alt="Configuración" class="sidebar-icon">
-        <span class="sidebar-text">Configuración</span>
-      </a>
-    </nav>
+<!-- Header -->
+<div class="header-inventario">
+  <h1>Inventario</h1>
+</div>
 
-    <div class="sidebar-footer">
-      <a href="../../login.html" class="sidebar-item logout">
-        <img src="../../assets/img/logout.svg" alt="Cerrar Sesión" class="sidebar-icon">
-        <span class="sidebar-text">Cerrar Sesión</span>
-      </a>
-    </div>
-  </aside>
+<!-- Contenido -->
+<div class="contenedor-principal">
+  <h2 class="titulo-seccion">Gestión de Productos</h2>
 
-  <!-- Contenedor Principal -->
-  <main class="main-content">
-    <!-- Header -->
-    <div class="header-inventario">
-      <button class="btn-toggle-sidebar-main">☰</button>
-      <h1>Inventario de Productos</h1>
-      <div></div>
-    </div>
+  <div class="controles">
+    <input type="text" id="busqueda" placeholder="Buscar producto..." />
+    <button id="btnBuscar">Buscar</button>
 
-    <!-- Contenido -->
-    <div class="contenedor-principal">
-      <h2 class="titulo-seccion">Gestión de Productos</h2>
+    <select id="categoriaSelect">
+      <option value="">-- Categoría --</option>
+      <option value="Frutas">Frutas</option>
+      <option value="Verduras">Verduras</option>
+      <option value="Cereales">Cereales</option>
+      <option value="Lácteos">Lácteos</option>
+      <option value="Conservas">Conservas</option>
+      <option value="Bebidas">Bebidas</option>
+      <option value="Condimentos">Condimentos</option>
+    </select>
+    <button id="btnFiltrarCategoria">Filtrar Categoría</button>
 
-      <div class="controles">
-        <input type="text" id="busqueda" placeholder="Buscar producto..." />
-        <button id="btnBuscar">Buscar</button>
+    <button id="btnStock">Comprobar Stock</button>
+    <button id="btnAgregarProducto">Agregar Producto</button>
+    <button id="btnMostrarTodos">Mostrar Todos</button>
+  </div>
 
-        <select id="categoriaSelect">
-          <option value="">-- Categoría --</option>
-          <option value="Frutas">Frutas</option>
-          <option value="Verduras">Verduras</option>
-          <option value="Cereales">Cereales</option>
-          <option value="Lácteos">Lácteos</option>
-          <option value="Conservas">Conservas</option>
-          <option value="Bebidas">Bebidas</option>
-          <option value="Condimentos">Condimentos</option>
-        </select>
-        <button id="btnFiltrarCategoria">Filtrar Categoría</button>
-
-        <button id="btnStock">Comprobar Stock</button>
-        <button id="btnAgregarProducto">Agregar Producto</button>
-        <button id="btnMostrarTodos">Mostrar Todos</button>
+  <!-- Formulario para agregar producto -->
+  <div id="formularioNuevoProducto" class="formulario-producto" style="display: none;">
+    <h3>Agregar Nuevo Producto</h3>
+    <form id="formProducto">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="nombreProducto">Nombre *</label>
+          <input type="text" id="nombreProducto" required>
+        </div>
+        <div class="form-group">
+          <label for="precioProducto">Precio (€) *</label>
+          <input type="number" id="precioProducto" step="0.01" min="0" required>
+        </div>
       </div>
-
-      <!-- Formulario para agregar producto (oculto inicialmente) -->
-      <div id="formularioNuevoProducto" class="formulario-producto" style="display: none;">
-        <h3>Agregar Nuevo Producto</h3>
-        <form id="formProducto">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="nombreProducto">Nombre *</label>
-              <input type="text" id="nombreProducto" required>
-            </div>
-            <div class="form-group">
-              <label for="precioProducto">Precio (€) *</label>
-              <input type="number" id="precioProducto" step="0.01" min="0" required>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="stockProducto">Stock *</label>
-              <input type="number" id="stockProducto" min="0" required>
-            </div>
-            <div class="form-group">
-              <label for="stockMinimoProducto">Stock Mínimo *</label>
-              <input type="number" id="stockMinimoProducto" min="0" required>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="categoriaProducto">Categoría *</label>
-              <select id="categoriaProducto" required>
-                <option value="">-- Seleccione --</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="proveedorProducto">Proveedor *</label>
-              <select id="proveedorProducto" required>
-                <option value="">-- Seleccione --</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-actions">
-            <button type="submit" class="btn-guardar">Guardar Producto</button>
-            <button type="button" id="btnCancelarProducto" class="btn-cancelar">Cancelar</button>
-          </div>
-        </form>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="stockProducto">Stock *</label>
+          <input type="number" id="stockProducto" min="0" required>
+        </div>
+        <div class="form-group">
+          <label for="stockMinimoProducto">Stock Mínimo *</label>
+          <input type="number" id="stockMinimoProducto" min="0" required>
+        </div>
       </div>
-
-      <!-- Tabla de Productos -->
-      <div class="tabla-contenedor">
-        <table id="tablaProductos">
-          <thead id="encabezado">
-            <tr>
-              <th id="headerId" class="sortable" data-sort-dir="none">ID</th>
-              <th>Nombre</th>
-              <th>Categoría</th>
-              <th id="headerPrecio" class="sortable" data-sort-dir="none">Precio (€)</th>
-              <th id="headerStock" class="sortable" data-sort-dir="none">Stock</th>
-              <th>Stock Mínimo</th>
-              <th>Proveedor</th>
-              <th>Isla</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-          <tfoot>
-            <tr><td colspan="8" id="resumen">Esperando datos...</td></tr>
-          </tfoot>
-        </table>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="categoriaProducto">Categoría *</label>
+          <select id="categoriaProducto" required>
+            <option value="">-- Seleccione --</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="proveedorProducto">Proveedor *</label>
+          <select id="proveedorProducto" required>
+            <option value="">-- Seleccione --</option>
+          </select>
+        </div>
       </div>
-    </div>
-  </main>
- 
-  <script type="module" src="../controllers/almacenController.js"></script>
-</body>
-</html>
+      <div class="form-actions">
+        <button type="submit" class="btn-guardar">Guardar Producto</button>
+        <button type="button" id="btnCancelarProducto" class="btn-cancelar">Cancelar</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Tabla de Productos -->
+  <div class="tabla-contenedor">
+    <table id="tablaProductos">
+      <thead id="encabezado">
+        <tr>
+          <th id="headerId" class="sortable" data-sort-dir="none">ID</th>
+          <th>Nombre</th>
+          <th>Categoría</th>
+          <th id="headerPrecio" class="sortable" data-sort-dir="none">Precio (€)</th>
+          <th id="headerStock" class="sortable" data-sort-dir="none">Stock</th>
+          <th>Stock Mínimo</th>
+          <th>Proveedor</th>
+          <th>Isla</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+      <tfoot>
+        <tr><td colspan="8" id="resumen">Esperando datos...</td></tr>
+      </tfoot>
+    </table>
+  </div>
+</div>

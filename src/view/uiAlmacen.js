@@ -1,15 +1,14 @@
 import { getCategories } from "../services/apiService.js";
 
-export const tabla = document.querySelector('#tablaProductos tbody');
-export const resumen = document.querySelector('#resumen');
-
-export const inputBusqueda = document.querySelector('#busqueda');
-export const controles = document.querySelector('.controles')
-export const selectCategoria = document.querySelector('#categoriaSelect');
-
-export const headerPrecio = document.getElementById('headerPrecio');
-export const headerId = document.getElementById('headerId');
-export const headerStock = document.getElementById('headerStock');
+// Funciones para obtener elementos del DOM dinámicamente
+export const getTabla = () => document.querySelector('#tablaProductos tbody');
+export const getResumen = () => document.querySelector('#resumen');
+export const getInputBusqueda = () => document.querySelector('#busqueda');
+export const getControles = () => document.querySelector('.controles');
+export const getSelectCategoria = () => document.querySelector('#categoriaSelect');
+export const getHeaderPrecio = () => document.getElementById('headerPrecio');
+export const getHeaderId = () => document.getElementById('headerId');
+export const getHeaderStock = () => document.getElementById('headerStock');
 
 export async function renderizarTabla(datos, tabla, resumen) {
   tabla.innerHTML = '';

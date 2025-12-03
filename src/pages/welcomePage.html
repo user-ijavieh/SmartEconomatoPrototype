@@ -31,25 +31,25 @@
             <h2 class="welcome-title">¡Bienvenido a Smart Economato!</h2>
             
             <div class="buttonsContainer">
-                <a href="#" class="btn-card">
+                <a href="main.html" class="btn-card">
                     <div class="btn-card-icon">
                         <img src="../../assets/img/house.svg" alt="">
                     </div>
                     <span>Inicio</span>
                 </a>
-                <a href="./inventario.html" class="btn-card">
+                <a href="main.html#inventario" class="btn-card">
                     <div class="btn-card-icon">
                         <img src="../../assets/img/inventory.svg" alt="">
                     </div>
                     <span>Inventario</span>
                 </a>
-                <a href="#" class="btn-card">
+                <a href="main.html#orders" class="btn-card">
                     <div class="btn-card-icon">
                         <img src="../../assets/img/truck.svg" alt="">
                     </div>
                     <span>Pedidos</span>
                 </a>
-                <a href="#" class="btn-card">
+                <a href="main.html#mainRecipes" class="btn-card">
                     <div class="btn-card-icon">
                         <img src="../../assets/img/recipe.svg" alt="">
                     </div>
@@ -85,6 +85,14 @@
 
     <script src="../view/transition.js"></script>
     <script src="../view/carousel.js"></script>
+    <script>
+        window.addEventListener('load', () => {
+            const hash = window.location.hash;
+            if (hash && hash !== '#') {
+                window.location.href = 'main.html' + hash;
+            }
+        });
+    </script>
 </body>
 </html>
 
