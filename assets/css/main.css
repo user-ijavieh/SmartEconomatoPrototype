@@ -7,15 +7,6 @@
   font-style: normal;
 }
 
-:root{
-  --base-clr: #B84B44;
-  --line-clr: rgba(255, 255, 255, 0.15);
-  --hover-clr: rgba(255, 255, 255, 0.1);
-  --text-clr: #ffffff;
-  --accent-clr: #ffffff;
-  --secondary-text-clr: rgba(255, 255, 255, 0.7);
-  --content-bg: #FAE7E0; /* Fondo del área de contenido */
-}
 *{
   margin: 0;
   padding: 0;
@@ -52,11 +43,14 @@ body{
   width: 60px;
 }
 main{
-  margin-left: 60px; /* Ancho del sidebar cerrado */
+  margin-left: 250px; 
   transition: margin-left 300ms ease-in-out;
   padding: min(30px, 7%);
   background-color: var(--content-bg);
   min-height: 100vh;
+}
+#sidebar.close ~ main{
+  margin-left: 60px;
 }
 #sidebar ul{
   list-style: none;
@@ -141,6 +135,9 @@ main{
     transition: rotate 150ms ease;
   }
 }
+#toggle-btn.rotate svg{
+  rotate: 180deg;
+}
 #toggle-btn:hover{
   background-color: var(--hover-clr);
 }
@@ -163,14 +160,17 @@ main p{
   body{
     grid-template-columns: 1fr;
   }
-  main{
+  main,
+  #sidebar ~ main,
+  #sidebar.close ~ main{
+    margin-left: 0;
     padding: 2em 1em 60px 1em;
   }
   .container{
     border: none;
     padding: 0;
   }
-  #sidebar{
+  #sidebar, #sidebar.close{
     height: 60px;
     width: 100%;
     border-right: none;
@@ -202,31 +202,32 @@ main p{
     ul li span, ul li:first-child, .dropdown-btn svg:last-child{
       display: none;
     }
+  }
 
-    ul li .sub-menu.show{
-      position: fixed;
-      bottom: 60px;
-      left: 0;
+  #sidebar ul li .sub-menu.show,
+  #sidebar.close ul li .sub-menu.show{
+    position: fixed;
+    bottom: 60px;
+    left: 0;
+    box-sizing: border-box;
+    height: 60px;
+    width: 100%;
+    background-color: rgba(184, 75, 68, 0.85);
+    border-top: 1px solid var(--line-clr);
+    display: flex;
+    justify-content: center;
+
+    > div{
+      overflow-x: auto;
+    }
+    li{
+      display: inline-flex;
+    }
+    a{
       box-sizing: border-box;
-      height: 60px;
-      width: 100%;
-      background-color: var(--hover-clr);
-      border-top: 1px solid var(--line-clr);
-      display: flex;
+      padding: 1em;
+      width: auto;
       justify-content: center;
-
-      > div{
-        overflow-x: auto;
-      }
-      li{
-        display: inline-flex;
-      }
-      a{
-        box-sizing: border-box;
-        padding: 1em;
-        width: auto;
-        justify-content: center;
-      }
     }
   }
 }

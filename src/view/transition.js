@@ -1,4 +1,3 @@
-// Manejo simple del loader durante la transición
 class SimpleTransition {
     constructor() {
         this.loginForm = document.querySelector('.login form');
@@ -7,7 +6,6 @@ class SimpleTransition {
         this.preloadCarouselImages();
     }
 
-    // Precargar imágenes del carrusel
     preloadCarouselImages() {
         const carouselImages = [
             '../../assets/img/carousel/carousel1.jpg',
@@ -24,13 +22,13 @@ class SimpleTransition {
                 img.onload = () => {
                     loadedCount++;
                     if (loadedCount === totalImages) {
-                        resolve(); // Todas las imágenes cargadas
+                        resolve(); 
                     }
                 };
                 img.onerror = () => {
                     loadedCount++;
                     if (loadedCount === totalImages) {
-                        resolve(); // Aunque haya error, continuar
+                        resolve();
                     }
                 };
                 img.src = imagePath;
@@ -39,16 +37,13 @@ class SimpleTransition {
     }
 
     setupEventListeners() {
-        // Evento personalizado de login exitoso
         document.addEventListener('loginSuccess', () => {
             const targetUrl = 'src/pages/welcomePage.html';
             this.showLoader(targetUrl);
         });
 
-        // Eventos de cerrar sesión (solo para links fuera del sidebar)
         if (this.logoutLinks.length > 0) {
             this.logoutLinks.forEach(link => {
-                // Excluir el botón de logout del sidebar (será manejado por sidebarToggle.js)
                 if (!link.classList.contains('sidebar-item')) {
                     link.addEventListener('click', (e) => {
                         e.preventDefault();
@@ -61,31 +56,25 @@ class SimpleTransition {
     }
 
     showLoader(targetUrl) {
-        // Crear contenedor del loader
         const loaderContainer = document.createElement('div');
         loaderContainer.className = 'loader-container active';
         loaderContainer.innerHTML = '<div class="loader"></div>';
         document.body.appendChild(loaderContainer);
 
-        // Si va a welcomePage, esperar a que carguen las imágenes
         if (targetUrl.includes('welcomePage')) {
-            // Esperar mínimo 1.5s para ver la animación + tiempo de carga
             Promise.all([
-                new Promise(resolve => setTimeout(resolve, 1500)), // Mínimo 1.5s de animación
-                this.preloadCarouselImages() // Esperar a que carguen las imágenes
+                new Promise(resolve => setTimeout(resolve, 1500)),
+                this.preloadCarouselImages()
             ]).then(() => {
-                // Ambas condiciones cumplidas, redirigir
                 window.location.href = targetUrl;
             });
         } else {
-            // Si no es welcomePage, usar timeout mínimo de 1.75s
             setTimeout(() => {
                 window.location.href = targetUrl;
             }, 1750);
         }
     }
 }
-
 
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => new SimpleTransition());

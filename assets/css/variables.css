@@ -3,13 +3,13 @@
     --secondary-color: #FAE7E0;
     --login-background-color: #fae7e0b1;
     
-    /* Sidebar & Main Colors */
     --base-clr: #B84B44;
     --line-clr: rgba(255, 255, 255, 0.15);
     --hover-clr: rgba(255, 255, 255, 0.1);
     --text-clr: #ffffff;
     --accent-clr: #ffffff;
     --secondary-text-clr: rgba(255, 255, 255, 0.7);
+    --content-bg: #FAE7E0;
 }
 
 @font-face {

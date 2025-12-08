@@ -1,15 +1,18 @@
 //* Modelos
-import { Producto } from '../models/productos.js';
-import { Proveedor } from '../models/proveedores.js';
-import { Categoria } from '../models/categorias.js';
-import { renderizarTabla, cargarCategoriasDesdeAPI, getTabla, getResumen, getControles, getInputBusqueda, getSelectCategoria, getHeaderPrecio, getHeaderId, getHeaderStock } from '../view/uiAlmacen.js';
+import { Producto } from '../../models/productos.js';
+import { Proveedor } from '../../models/proveedores.js';
+import { Categoria } from '../../models/categorias.js';
+import { renderizarTabla, cargarCategoriasDesdeAPI, getTabla, getResumen, getControles, getInputBusqueda, getSelectCategoria, getHeaderPrecio, getHeaderId, getHeaderStock } from '../../view/uiAlmacen.js';
 
 //* Funciones de la API
-import { getProducts , getSuppliers , getCategories } from '../services/apiService.js'
+import { getProducts , getSuppliers , getCategories } from '../../services/apiService.js'
 
 //* Mas cosas
 
-import { manejarBusqueda, manejarFiltro, manejarOrden, manejarStock, manejarMostrarTodos } from '../utils/funciones.js';
+import { manejarBusqueda, manejarFiltro, manejarOrden, manejarStock, manejarMostrarTodos } from '../../utils/funciones.js';
+
+//* Controlador del formulario
+import { initFormProducto } from './formProductoController.js';
 
 //* Método para cargar todos los productos
 
@@ -224,64 +227,13 @@ export async function init() {
             renderizarTabla(productosMostrados, tabla, resumen);
         });
 
-        // Listener para el botón de cancelar
-        document.getElementById('btnCancelarProducto').addEventListener('click', () => {
-            toggleFormularioProducto();
-        });
-
-        // Evento para enviar el formulario de nuevo producto
-        document.getElementById('formProducto').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const productos = await loadProducts()
-            const elementoConMaxId = productos.reduce((max, actual) => {
-                const maxId = parseInt(max.id, 10);
-                const actualId = parseInt(actual.id, 10);
-                
-                return (maxId > actualId) ? max : actual;
-            }, productos[0]);
-            alert(elementoConMaxId.nombre)
-            const nuevoProducto = {
-                id: String(parseInt(elementoConMaxId.id, 10) + 1),
-                nombre: document.getElementById('nombreProducto').value,
-                precio: parseFloat(document.getElementById('precioProducto').value),
-                precioUnitario: parseFloat(document.getElementById('precioProducto').value),
-                stock: parseInt(document.getElementById('stockProducto').value),
-                stockMinimo: parseInt(document.getElementById('stockMinimoProducto').value),
-                categoriaId: parseInt(document.getElementById('categoriaProducto').value),
-                proveedorId: parseInt(document.getElementById('proveedorProducto').value),
-                unidadMedida: 'unidad',
-                marca: '',
-                codigoBarras: '',
-                fechaCaducidad: '',
-                alergenos: [],
-                descripcion: '',
-                imagen: '',
-                activo: true
-            };
-
-            try {
-                const response = await fetch('http://localhost:3000/productos', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(nuevoProducto)
-                });
-
-                if (response.ok) {
-                    alert('Producto agregado exitosamente');
-                    toggleFormularioProducto();
-                    // Recargar productos
-                    productosMostrados = await loadProducts();
-                    renderizarTabla(productosMostrados, tabla, resumen);
-                } else {
-                    alert('Error al agregar el producto');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Error al conectar con el servidor');
+        // Inicializar el controlador del formulario de productos
+        initFormProducto(
+            toggleFormularioProducto,
+            (productosActualizados) => {
+                productosMostrados = productosActualizados;
             }
-        });
+        );
 
     } catch (error) {
         console.error('Error inicializando almacenController:', error);

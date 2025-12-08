@@ -1,10 +1,12 @@
+import { AuthService } from '../services/authService.js'
+
 const routes = {
-    "inventario": { controller: "almacenController.js", html: "inventario.html" },
-    "mainRecipes": { controller: "#", html: "mainRecipes.html" },
-    "orders": { controller: "#", html: "orders.html" },
-    "reception": { controller: "#", html: "reception.html" },
-    "profile": { controller: "#", html: "profile.html" },
-    "welcomePage": { controller: "#", html: "welcomePage.html" }
+    "inventario": { controller: "almacenController/almacenController.js", html: "inventario.html", requiresAuth: true },
+    "mainRecipes": { controller: "#", html: "mainRecipes.html", requiresAuth: true },
+    "orders": { controller: "#", html: "orders.html", requiresAuth: true },
+    "reception": { controller: "#", html: "reception.html", requiresAuth: true },
+    "profile": { controller: "#", html: "profile.html", requiresAuth: true },
+    "welcomePage": { controller: "#", html: "welcomePage.html", requiresAuth: true }
 }
 
 export const ROUTER = {
@@ -15,7 +17,11 @@ export const ROUTER = {
 
             if (!routes[page]) throw new Error(`Ruta '${page}' no configurada`);
 
-            // Cargar HTML
+            if (routes[page].requiresAuth && !AuthService.isAuthenticated()) {
+                window.location.href = '../../login.html'
+                return
+            }
+
             const response = await fetch(`../pages/${routes[page].html}`);
             if (!response.ok) throw new Error("Página no encontrada");
 
@@ -25,12 +31,9 @@ export const ROUTER = {
             content.textContent = "";
             content.appendChild(fragment);
 
-            // Cargar controller si existe
             if (routes[page].controller !== "#") {
                 try {
-                    // Agregar query string para evitar caché del módulo
                     const module = await import(`../controllers/${routes[page].controller}?t=${Date.now()}`);
-
                     if (module && module.init) {
                         await module.init();
                     }

@@ -51,7 +51,6 @@ export function generateCategory(categorias){
     console.warn('El select de categorías no fue encontrado en el DOM');
     return;
   }
-
   // Limpiar opciones previas
   selectCategoria.innerHTML = ""
 
@@ -74,7 +73,6 @@ export function generateCategory(categorias){
   })
 }
 
-// Función para cargar categorías desde la API al iniciar la página
 export async function cargarCategoriasDesdeAPI() {
   try {
     console.log('Cargando categorías desde la API...');

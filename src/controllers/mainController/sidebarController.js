@@ -1,7 +1,6 @@
 const toggleButton = document.getElementById('toggle-btn')
 const sidebar = document.getElementById('sidebar')
 
-// Close All SubMenus
 function closeAllSubMenus() {
   Array.from(sidebar.getElementsByClassName('show')).forEach(ul => {
     ul.classList.remove('show')
@@ -9,12 +8,10 @@ function closeAllSubMenus() {
   })
 }
 
-// Toggle Sidebar
 export function toggleSidebar() {
   closeAllSubMenus()
 }
 
-// Toggle SubMenu
 export function toggleSubMenu(button) {
   if (!button.nextElementSibling.classList.contains('show')) {
     closeAllSubMenus()

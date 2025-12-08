@@ -1,12 +1,31 @@
 import { ROUTER } from "../../router/router.js";
 import { toggleSidebar } from './sidebarController.js'
 import { renderToggleSidebar, renderToggleSubMenu } from '../../view/uiMain.js'
+import { AuthService } from '../../services/authService.js'
+
+// Verificar autenticación al cargar la página
+if (!AuthService.isAuthenticated()) {
+  console.warn('Usuario no autenticado, redirigiendo al login...');
+  window.location.href = '../../login.html';
+}
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
   const toggleButton = document.getElementById('toggle-btn')
   const dropdownBtns = document.querySelectorAll('.dropdown-btn')
   const navLinks = document.querySelectorAll('[data-route]')
+  const btnLogout = document.getElementById('btnLogout')
+
+  // Logout button
+  if (btnLogout) {
+    btnLogout.addEventListener('click', (e) => {
+      e.preventDefault()
+      if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
+        AuthService.logout()
+        window.location.href = '../../login.html'
+      }
+    })
+  }
 
   // Toggle sidebar button
   if (toggleButton) {

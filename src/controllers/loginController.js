@@ -2,6 +2,11 @@ import { AuthService } from "../services/authService.js";
 import { uiLogin } from "../view/uiLogin.js";
 
 document.addEventListener("DOMContentLoaded", () => {
+    
+    if (AuthService.isAuthenticated()) {
+        window.location.href = 'src/pages/welcomePage.html'
+        return
+    }
 
     const formulario = document.getElementById("loginForm")
 
