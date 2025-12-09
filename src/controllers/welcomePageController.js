@@ -1,4 +1,5 @@
 import { AuthService } from '../services/authService.js';
+import { messageService } from '../services/messageService.js';
 
 
 if (!AuthService.isAuthenticated()) {
@@ -6,13 +7,21 @@ if (!AuthService.isAuthenticated()) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const btnLogout = document.querySelector('.btn-logout');
+    const btnLogout = document.getElementById('btnCerrarSesion');
 
     if (btnLogout) {
-        btnLogout.addEventListener('click', (e) => {
+        btnLogout.addEventListener('click', async (e) => {
             e.preventDefault();
             
-            if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
+            const confirmed = await messageService.askConfirmation(
+                '¿Estás seguro de que deseas cerrar sesión?',
+                {
+                    title: 'Cerrar Sesión',
+                    confirmText: 'Sí, cerrar sesión',
+                    cancelText: 'Cancelar'
+                }
+            )
+            if (confirmed) {
                 AuthService.logout();
                 window.location.href = '../../login.html';
             }

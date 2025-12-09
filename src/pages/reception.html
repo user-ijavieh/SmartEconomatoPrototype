@@ -1,0 +1,135 @@
+<!-- Módulo de Recepción de Productos -->
+<link rel="stylesheet" href="../../assets/css/reception.css">
+<link rel="stylesheet" href="../../assets/css/messageService.css">
+
+<div class="reception-page">
+    <!-- Header -->
+    <header class="reception-header">
+        <h1>RECEPCION DE PRODUCTOS</h1>
+    </header>
+
+    <!-- Contenido Principal -->
+    <div class="reception-content">
+        <!-- Botones de Acción Superior -->
+        <div class="top-actions">
+            <button type="button" id="btnAgregarItem" class="btn-add-item">
+                + AGREGAR ITEM
+            </button>
+            <button type="button" id="btnGuardarRecepcion" class="btn-save-reception" disabled>
+                GUARDAR RECEPCION
+            </button>
+        </div>
+
+        <!-- Formulario Inline de Nuevo Item -->
+        <section id="formSection" class="form-section" style="display: none;">
+            <div class="form-container">
+                <div class="form-header">
+                    <h3 class="form-title">AGREGAR NUEVO ITEM</h3>
+                </div>
+
+                <form id="formNuevoItem" class="inline-form">
+                    <!-- Fila 1: Nombre del Producto, Proveedor y Categoría -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nombreProducto">NOMBRE DEL PRODUCTO *</label>
+                            <div class="autocomplete-container">
+                                <input 
+                                    type="text" 
+                                    id="nombreProducto" 
+                                    placeholder="Escribe el nombre del producto..."
+                                    autocomplete="off"
+                                    required>
+                                <div id="autocompleteDropdown" class="autocomplete-dropdown"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="proveedorProducto">PROVEEDOR *</label>
+                            <select id="proveedorProducto" required>
+                                <option value="">-- SELECCIONE --</option>
+                                <!-- Se llenará dinámicamente -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="categoriaProducto">CATEGORÍA *</label>
+                            <select id="categoriaProducto" required>
+                                <option value="">-- SELECCIONE --</option>
+                                <!-- Se llenará dinámicamente -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Fila 2: Cantidad y Precio -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="cantidadProducto">CANTIDAD *</label>
+                            <input 
+                                type="number" 
+                                id="cantidadProducto" 
+                                placeholder="0"
+                                min="1"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label for="precioProducto">PRECIO (€) *</label>
+                            <input 
+                                type="number" 
+                                id="precioProducto" 
+                                placeholder="0.00"
+                                step="0.01"
+                                min="0"
+                                required>
+                        </div>
+                    </div>
+
+                    <!-- Fila 3: Código de Barras -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="codigoBarras">CÓDIGO DE BARRAS</label>
+                            <input 
+                                type="text" 
+                                id="codigoBarras" 
+                                placeholder="Escanear código de barras..."
+                                autocomplete="off"
+                                disabled
+                                title="Función disponible próximamente">
+                        </div>
+                    </div>
+
+                    <!-- Fila 4: Notas -->
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label for="notasProducto">NOTAS</label>
+                            <textarea 
+                                id="notasProducto" 
+                                rows="3"
+                                placeholder="NOTAS ADICIONALES..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Botones del Formulario -->
+                    <div class="form-actions">
+                        <button type="submit" class="btn-agregar">AGREGAR ITEM</button>
+                        <button type="button" id="btnCancelar" class="btn-cancelar">CANCELAR</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Sección de Items de Recepción -->
+        <section class="items-section">
+            <h2 class="section-title">ITEMS DE RECEPCION</h2>
+            
+            <!-- Estado Vacío -->
+            <div id="estadoVacio" class="empty-state">
+                <p class="empty-message">
+                    NO HAY ITEMS AGREGADOS. HAZ CLIC EN "AGREGAR ITEM" PARA COMENZAR.
+                </p>
+            </div>
+
+            <!-- Lista de Items -->
+            <div id="listaItems" class="items-list" style="display: none;">
+                <!-- Los items se cargarán dinámicamente aquí -->
+            </div>
+        </section>
+    </div>
+</div>

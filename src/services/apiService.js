@@ -19,3 +19,35 @@ export const getSuppliers = async () => {
     const response = await fetch(`${API_BASE_URL}/${TABLES.proveedores}`)
     return await response.json();
 }
+
+export const updateProduct = async (id, productData) => {
+    const response = await fetch(`${API_BASE_URL}/${TABLES.productos}/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(productData)
+    });
+    
+    if (!response.ok) {
+        throw new Error(`Error al actualizar producto: ${response.statusText}`);
+    }
+    
+    return await response.json();
+}
+
+export const createProduct = async (productData) => {
+    const response = await fetch(`${API_BASE_URL}/${TABLES.productos}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(productData)
+    });
+    
+    if (!response.ok) {
+        throw new Error(`Error al crear producto: ${response.statusText}`);
+    }
+    
+    return await response.json();
+}

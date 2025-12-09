@@ -1,4 +1,4 @@
-import { getCategories } from "../services/apiService.js";
+import { getCategories, getSuppliers } from "../services/apiService.js";
 
 // Funciones para obtener elementos del DOM dinámicamente
 export const getTabla = () => document.querySelector('#tablaProductos tbody');
@@ -79,7 +79,61 @@ export async function cargarCategoriasDesdeAPI() {
     const categorias = await getCategories();
     console.log('Categorías cargadas:', categorias);
     generateCategory(categorias);
+    
+    // Cargar categorías en el formulario de nuevo producto
+    await cargarCategoriasEnFormulario(categorias);
   } catch (error) {
     console.error('Error al cargar las categorías:', error);
+  }
+}
+
+/**
+ * Carga las categorías en el select del formulario de nuevo producto
+ */
+async function cargarCategoriasEnFormulario(categorias) {
+  const selectCategoria = document.getElementById('categoriaProducto');
+  
+  if (!selectCategoria) {
+    console.warn('El select de categorías del formulario no fue encontrado');
+    return;
+  }
+  
+  // Limpiar opciones previas (mantener la opción por defecto)
+  selectCategoria.innerHTML = '<option value="">-- Seleccione --</option>';
+  
+  // Añadir categorías
+  categorias.forEach(categoria => {
+    const option = document.createElement('option');
+    option.value = categoria.id;
+    option.textContent = categoria.nombre;
+    selectCategoria.appendChild(option);
+  });
+}
+
+/**
+ * Carga los proveedores en el select del formulario de nuevo producto
+ */
+export async function cargarProveedoresEnFormulario() {
+  try {
+    const proveedores = await getSuppliers();
+    const selectProveedor = document.getElementById('proveedorProducto');
+    
+    if (!selectProveedor) {
+      console.warn('El select de proveedores del formulario no fue encontrado');
+      return;
+    }
+    
+    // Limpiar opciones previas (mantener la opción por defecto)
+    selectProveedor.innerHTML = '<option value="">-- Seleccione --</option>';
+    
+    // Añadir proveedores
+    proveedores.forEach(proveedor => {
+      const option = document.createElement('option');
+      option.value = proveedor.id;
+      option.textContent = proveedor.nombre;
+      selectProveedor.appendChild(option);
+    });
+  } catch (error) {
+    console.error('Error al cargar los proveedores:', error);
   }
 }

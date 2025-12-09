@@ -2,6 +2,7 @@ import { ROUTER } from "../../router/router.js";
 import { toggleSidebar } from './sidebarController.js'
 import { renderToggleSidebar, renderToggleSubMenu } from '../../view/uiMain.js'
 import { AuthService } from '../../services/authService.js'
+import { messageService } from '../../services/messageService.js'
 
 // Verificar autenticación al cargar la página
 if (!AuthService.isAuthenticated()) {
@@ -18,9 +19,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Logout button
   if (btnLogout) {
-    btnLogout.addEventListener('click', (e) => {
+    btnLogout.addEventListener('click', async (e) => {
       e.preventDefault()
-      if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
+      const confirmed = await messageService.askConfirmation(
+        '¿Estás seguro de que deseas cerrar sesión?',
+        {
+          title: 'Cerrar Sesión',
+          confirmText: 'Sí, cerrar sesión',
+          cancelText: 'Cancelar'
+        }
+      )
+      if (confirmed) {
         AuthService.logout()
         window.location.href = '../../login.html'
       }

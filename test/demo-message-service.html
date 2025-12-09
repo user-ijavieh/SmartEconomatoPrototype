@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo - Message Service</title>
+    <link rel="stylesheet" href="../assets/css/variables.css">
+    <link rel="stylesheet" href="../assets/css/messageService.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .demo-container {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #1f2937;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            color: #374151;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .demo-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .demo-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .demo-btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-success {
+            background-color: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #059669;
+        }
+
+        .btn-error {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        .btn-error:hover {
+            background-color: #dc2626;
+        }
+
+        .btn-confirm {
+            background-color: #3b82f6;
+            color: white;
+        }
+
+        .btn-confirm:hover {
+            background-color: #2563eb;
+        }
+
+        .btn-warning {
+            background-color: #f59e0b;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background-color: #d97706;
+        }
+
+        .code-example {
+            background-color: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 12px;
+            margin-top: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #374151;
+            overflow-x: auto;
+        }
+
+        .result-box {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 6px;
+            background-color: #f9fafb;
+            border-left: 4px solid #3b82f6;
+            display: none;
+        }
+
+        .result-box.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @media (max-width: 600px) {
+            .demo-container {
+                padding: 24px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .demo-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1>🎨 Message Service Demo</h1>
+        <p class="subtitle">Prueba todas las funcionalidades del servicio de mensajes</p>
+
+        <!-- Sección Toast -->
+        <div class="section">
+            <h2 class="section-title">📢 Notificaciones Toast</h2>
+            <div class="button-group">
+                <button class="demo-btn btn-success" onclick="testSuccessToast()">
+                    ✓ Toast Success
+                </button>
+                <button class="demo-btn btn-error" onclick="testErrorToast()">
+                    ✕ Toast Error
+                </button>
+            </div>
+            <div class="code-example">
+messageService.showSuccess('Operación exitosa');<br>
+messageService.showError('Error al procesar');
+            </div>
+        </div>
+
+        <!-- Sección Toast con duración -->
+        <div class="section">
+            <h2 class="section-title">⏱️ Toast con Duración Personalizada</h2>
+            <div class="button-group">
+                <button class="demo-btn btn-success" onclick="testShortToast()">
+                    1.5 segundos
+                </button>
+                <button class="demo-btn btn-warning" onclick="testLongToast()">
+                    5 segundos
+                </button>
+            </div>
+            <div class="code-example">
+messageService.showSuccess('Mensaje corto', 1500);<br>
+messageService.showError('Mensaje largo', 5000);
+            </div>
+        </div>
+
+        <!-- Sección Confirmación -->
+        <div class="section">
+            <h2 class="section-title">💬 Diálogos de Confirmación</h2>
+            <div class="button-group">
+                <button class="demo-btn btn-confirm" onclick="testBasicConfirm()">
+                    Confirmación Básica
+                </button>
+                <button class="demo-btn btn-warning" onclick="testCustomConfirm()">
+                    Confirmación Personalizada
+                </button>
+            </div>
+            <div class="code-example">
+const result = await messageService.askConfirmation(<br>
+&nbsp;&nbsp;'¿Deseas continuar?'<br>
+);
+            </div>
+            <div id="resultBox" class="result-box"></div>
+        </div>
+
+        <!-- Sección Múltiples -->
+        <div class="section">
+            <h2 class="section-title">🎯 Casos de Uso Reales</h2>
+            <div class="button-group">
+                <button class="demo-btn btn-success" onclick="testFormSubmit()">
+                    Guardar Formulario
+                </button>
+                <button class="demo-btn btn-error" onclick="testDeleteItem()">
+                    Eliminar Elemento
+                </button>
+                <button class="demo-btn btn-confirm" onclick="testLogout()">
+                    Cerrar Sesión
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { messageService } from '../src/services/messageService.js';
+
+        // Hacer messageService global para los ejemplos
+        window.messageService = messageService;
+
+        // Toast Success
+        window.testSuccessToast = () => {
+            messageService.showSuccess('¡Operación completada exitosamente!');
+        };
+
+        // Toast Error
+        window.testErrorToast = () => {
+            messageService.showError('Error al procesar la solicitud');
+        };
+
+        // Toast corto
+        window.testShortToast = () => {
+            messageService.showSuccess('Mensaje corto (1.5s)', 1500);
+        };
+
+        // Toast largo
+        window.testLongToast = () => {
+            messageService.showError('Mensaje largo que dura 5 segundos', 5000);
+        };
+
+        // Confirmación básica
+        window.testBasicConfirm = async () => {
+            const result = await messageService.askConfirmation(
+                '¿Deseas continuar con esta acción?'
+            );
+            showResult(result);
+        };
+
+        // Confirmación personalizada
+        window.testCustomConfirm = async () => {
+            const result = await messageService.askConfirmation(
+                '¿Estás seguro de que deseas eliminar este elemento? Esta acción no se puede deshacer.',
+                {
+                    title: 'Eliminar Elemento',
+                    confirmText: 'Sí, eliminar',
+                    cancelText: 'No, cancelar'
+                }
+            );
+            showResult(result);
+        };
+
+        // Caso: Guardar formulario
+        window.testFormSubmit = async () => {
+            const confirmed = await messageService.askConfirmation(
+                '¿Deseas guardar los cambios realizados?',
+                {
+                    title: 'Guardar Cambios',
+                    confirmText: 'Guardar',
+                    cancelText: 'Descartar'
+                }
+            );
+
+            if (confirmed) {
+                // Simular guardado
+                setTimeout(() => {
+                    messageService.showSuccess('Formulario guardado correctamente');
+                }, 500);
+            } else {
+                messageService.showError('Cambios descartados');
+            }
+        };
+
+        // Caso: Eliminar elemento
+        window.testDeleteItem = async () => {
+            const confirmed = await messageService.askConfirmation(
+                'Esta acción eliminará el elemento permanentemente. ¿Deseas continuar?',
+                {
+                    title: 'Eliminar Elemento',
+                    confirmText: 'Sí, eliminar',
+                    cancelText: 'Cancelar'
+                }
+            );
+
+            if (confirmed) {
+                setTimeout(() => {
+                    messageService.showSuccess('Elemento eliminado exitosamente');
+                }, 500);
+            }
+        };
+
+        // Caso: Cerrar sesión
+        window.testLogout = async () => {
+            const confirmed = await messageService.askConfirmation(
+                '¿Estás seguro de que deseas cerrar sesión?',
+                {
+                    title: 'Cerrar Sesión',
+                    confirmText: 'Sí, cerrar sesión',
+                    cancelText: 'Cancelar'
+                }
+            );
+
+            if (confirmed) {
+                messageService.showSuccess('Sesión cerrada correctamente');
+                setTimeout(() => {
+                    messageService.showError('Redirigiendo al login...', 2000);
+                }, 1000);
+            }
+        };
+
+        // Mostrar resultado de confirmación
+        function showResult(result) {
+            const resultBox = document.getElementById('resultBox');
+            resultBox.className = 'result-box show';
+            resultBox.innerHTML = `
+                <strong>Resultado:</strong> ${result ? '✅ Confirmado' : '❌ Cancelado'}
+            `;
+            
+            setTimeout(() => {
+                resultBox.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

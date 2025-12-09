@@ -1,5 +1,5 @@
 import { AuthService } from "../services/authService.js";
-import { uiLogin } from "../view/uiLogin.js";
+import { messageService } from "../services/messageService.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     
@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const password = document.getElementById("txtPassword").value
 
         if(!username.trim() || !password.trim()){
-            uiLogin.showMessage('Por favor, ingresa usuario y contraseña', 'error')
+            messageService.showError('Por favor, ingresa usuario y contraseña')
             return
         }
 
@@ -25,15 +25,16 @@ document.addEventListener("DOMContentLoaded", () => {
             const user = await AuthService.login(username, password)
             
             if(user){
-                uiLogin.clearForm()
+                messageService.showSuccess('¡Bienvenido!', 1500)
+                document.getElementById("loginForm").reset()
                 const loginSuccessEvent = new Event('loginSuccess')
                 document.dispatchEvent(loginSuccessEvent)
             } else {
-                uiLogin.showMessage('Usuario o contraseña incorrectos', 'error')
+                messageService.showError('Usuario o contraseña incorrectos')
             }
         }catch(error){
             console.log(error)
-            uiLogin.showMessage('Error al iniciar sesión: ' + error.message, 'error')
+            messageService.showError('Error al iniciar sesión: ' + error.message)
         }
 
     })

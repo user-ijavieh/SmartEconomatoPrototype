@@ -2,7 +2,7 @@
 import { Producto } from '../../models/productos.js';
 import { Proveedor } from '../../models/proveedores.js';
 import { Categoria } from '../../models/categorias.js';
-import { renderizarTabla, cargarCategoriasDesdeAPI, getTabla, getResumen, getControles, getInputBusqueda, getSelectCategoria, getHeaderPrecio, getHeaderId, getHeaderStock } from '../../view/uiAlmacen.js';
+import { renderizarTabla, cargarCategoriasDesdeAPI, cargarProveedoresEnFormulario, getTabla, getResumen, getControles, getInputBusqueda, getSelectCategoria, getHeaderPrecio, getHeaderId, getHeaderStock } from '../../view/uiAlmacen.js';
 
 //* Funciones de la API
 import { getProducts , getSuppliers , getCategories } from '../../services/apiService.js'
@@ -87,6 +87,22 @@ export const loadSuppliers = async () => {
 // Variable que almacena los productos mostrados
 let productosMostrados = [];
 
+/**
+ * Alterna la visibilidad del formulario de nuevo producto
+ */
+function toggleFormularioProducto() {
+    const formulario = document.getElementById('formularioNuevoProducto');
+    if (formulario) {
+        const isVisible = formulario.style.display !== 'none';
+        formulario.style.display = isVisible ? 'none' : 'block';
+        
+        // Limpiar el formulario cuando se oculta
+        if (isVisible) {
+            document.getElementById('formProducto').reset();
+        }
+    }
+}
+
 // Función de inicialización
 export async function init() {
     try {
@@ -107,6 +123,9 @@ export async function init() {
 
         // Cargar categorías en el selector desde la API
         await cargarCategoriasDesdeAPI();
+        
+        // Cargar proveedores en el formulario
+        await cargarProveedoresEnFormulario();
 
         // Definición de todas las acciones en cada evento
         const acciones = {

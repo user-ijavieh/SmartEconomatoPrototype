@@ -1488,24 +1488,6 @@
         "id": 3,
         "nombre": "Carnicerías Selectas del Norte"
       }
-    },
-    {
-      "id": "51",
-      "nombre": "wey",
-      "precio": 33,
-      "precioUnitario": 33,
-      "stock": 22,
-      "stockMinimo": 20,
-      "categoriaId": 12,
-      "proveedorId": 7,
-      "unidadMedida": "unidad",
-      "marca": "",
-      "codigoBarras": "",
-      "fechaCaducidad": "",
-      "alergenos": [],
-      "descripcion": "",
-      "imagen": "",
-      "activo": true
     }
   ]
 }

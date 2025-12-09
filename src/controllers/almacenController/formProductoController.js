@@ -1,6 +1,7 @@
 //* Funciones de la API
 import { loadProducts } from './almacenController.js';
 import { renderizarTabla, getTabla, getResumen } from '../../view/uiAlmacen.js';
+import { messageService } from '../../services/messageService.js';
 
 export function initFormProducto(toggleFormularioProducto, actualizarProductosMostrados) {
     document.getElementById('btnCancelarProducto').addEventListener('click', () => {
@@ -21,8 +22,6 @@ async function manejarSubmitProducto(toggleFormularioProducto, actualizarProduct
         
         return (maxId > actualId) ? max : actual;
     }, productos[0]);
-    
-    alert(elementoConMaxId.nombre);
     
     const nuevoProducto = {
         id: String(parseInt(elementoConMaxId.id, 10) + 1),
@@ -53,7 +52,7 @@ async function manejarSubmitProducto(toggleFormularioProducto, actualizarProduct
         });
 
         if (response.ok) {
-            alert('Producto agregado exitosamente');
+            messageService.showSuccess('Producto agregado exitosamente');
             toggleFormularioProducto();
             
             // Recargar productos
@@ -64,10 +63,10 @@ async function manejarSubmitProducto(toggleFormularioProducto, actualizarProduct
             const resumen = getResumen();
             renderizarTabla(productosActualizados, tabla, resumen);
         } else {
-            alert('Error al agregar el producto');
+            messageService.showError('Error al agregar el producto');
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Error al conectar con el servidor');
+        messageService.showError('Error al conectar con el servidor');
     }
 }

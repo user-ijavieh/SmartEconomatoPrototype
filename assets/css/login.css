@@ -118,26 +118,3 @@ body{
 .container .logos img:hover {
     transform: scale(1.05);
 }
-
-.error{
-    color: red;
-}
-
-/* Login Message */
-
-.login-message {
-    padding: 15px 20px;
-    border-radius: 8px;
-    margin: 0 auto 20px auto;
-    font-weight: bold;
-    text-align: center;
-    animation: slideDown 0.3s ease-out;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-.login-message-error {
-    background-color: #ffcccb;
-    color: #c00;
-    border: 1px solid #ff6b6b;
-}

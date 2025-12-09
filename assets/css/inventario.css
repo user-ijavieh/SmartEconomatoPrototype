@@ -1,12 +1,5 @@
 @import url("./variables.css");
 
-@font-face {
-    font-family: 'Deserta';
-    src: url('../fonts/Deserta.otf') format('opentype');
-    font-weight: normal;
-    font-style: normal;
-}
-
 * {
     margin: 0;
     padding: 0;

@@ -4,7 +4,7 @@ const routes = {
     "inventario": { controller: "almacenController/almacenController.js", html: "inventario.html", requiresAuth: true },
     "mainRecipes": { controller: "#", html: "mainRecipes.html", requiresAuth: true },
     "orders": { controller: "#", html: "orders.html", requiresAuth: true },
-    "reception": { controller: "#", html: "reception.html", requiresAuth: true },
+    "reception": { controller: "receptionController.js", html: "reception.html", requiresAuth: true },
     "profile": { controller: "#", html: "profile.html", requiresAuth: true },
     "welcomePage": { controller: "#", html: "welcomePage.html", requiresAuth: true }
 }
