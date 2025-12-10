@@ -1,5 +1,18 @@
+/**
+ * @fileoverview Router de la aplicación
+ * Maneja la navegación entre páginas y carga de controladores
+ * @module router/router
+ */
+
 import { AuthService } from '../services/authService.js'
 
+/**
+ * Configuración de rutas de la aplicación
+ * @type {Object<string, Object>}
+ * @property {string} controller - Ruta del controlador asociado
+ * @property {string} html - Archivo HTML de la página
+ * @property {boolean} requiresAuth - Si requiere autenticación
+ */
 const routes = {
     "inventario": { controller: "almacenController/almacenController.js", html: "inventario.html", requiresAuth: true },
     "mainRecipes": { controller: "#", html: "mainRecipes.html", requiresAuth: true },
@@ -9,7 +22,22 @@ const routes = {
     "welcomePage": { controller: "#", html: "welcomePage.html", requiresAuth: true }
 }
 
+/**
+ * Router principal de la aplicación
+ * Maneja la carga dinámica de páginas y controladores
+ * @namespace ROUTER
+ */
 export const ROUTER = {
+    /**
+     * Navega a la página especificada
+     * Carga el HTML y ejecuta el controlador asociado si es necesario
+     * @async
+     * @param {string} page - Nombre de la página/ruta a cargar
+     * @returns {Promise<void>}
+     * @throws {Error} Si la ruta no está configurada o hay error en la carga
+     * @example
+     * await ROUTER.route('inventario');
+     */
     async route(page) {
         try {
             const content = document.getElementById("content");

@@ -1,3 +1,13 @@
+/**
+ * @fileoverview Interfaz de usuario de recepción
+ * Proporciona funciones para gestionar la UI del módulo de recepción
+ * @module view/uiReception
+ */
+
+/**
+ * Objeto con referencias a elementos del DOM
+ * @type {Object}
+ */
 // Referencias al DOM
 export const elementos = {
     btnAgregarItem: null,
@@ -19,6 +29,10 @@ export const elementos = {
     autocompleteDropdown: null
 };
 
+/**
+ * Obtiene referencias a todos los elementos DOM necesarios
+ * @returns {void}
+ */
 export function obtenerReferenciasDOM() {
     elementos.btnAgregarItem = document.getElementById('btnAgregarItem');
     elementos.btnGuardarRecepcion = document.getElementById('btnGuardarRecepcion');
@@ -39,6 +53,11 @@ export function obtenerReferenciasDOM() {
     elementos.autocompleteDropdown = document.getElementById('autocompleteDropdown');
 }
 
+/**
+ * Llena el select de proveedores con opciones
+ * @param {Array<Proveedor>} proveedores - Array de proveedores
+ * @returns {void}
+ */
 export function llenarSelectProveedores(proveedores) {
     while (elementos.proveedorProducto.firstChild) {
         elementos.proveedorProducto.removeChild(elementos.proveedorProducto.firstChild);
@@ -57,6 +76,11 @@ export function llenarSelectProveedores(proveedores) {
     });
 }
 
+/**
+ * Llena el select de categorías con opciones
+ * @param {Array<Categoria>} categorias - Array de categorías
+ * @returns {void}
+ */
 export function llenarSelectCategorias(categorias) {
     while (elementos.categoriaProducto.firstChild) {
         elementos.categoriaProducto.removeChild(elementos.categoriaProducto.firstChild);
@@ -75,16 +99,30 @@ export function llenarSelectCategorias(categorias) {
     });
 }
 
+/**
+ * Abre el formulario de nuevo item
+ * @returns {void}
+ */
 export function abrirFormulario() {
     elementos.formSection.style.display = 'block';
     elementos.nombreProducto.focus();
 }
 
+/**
+ * Cierra el formulario y lo limpia
+ * @returns {void}
+ */
 export function cerrarFormulario() {
     elementos.formSection.style.display = 'none';
     elementos.formNuevoItem.reset();
 }
 
+/**
+ * Muestra el dropdown de autocompletado de productos
+ * @param {Array<Object>} productos - Array de productos para mostrar
+ * @param {Function} onSelectCallback - Función callback cuando se selecciona un producto
+ * @returns {void}
+ */
 export function mostrarDropdown(productos, onSelectCallback) {
     if (!Array.isArray(productos)) {
         productos = [];
@@ -132,10 +170,19 @@ export function mostrarDropdown(productos, onSelectCallback) {
     elementos.autocompleteDropdown.classList.add('show');
 }
 
+/**
+ * Oculta el dropdown de autocompletado
+ * @returns {void}
+ */
 export function ocultarDropdown() {
     elementos.autocompleteDropdown.classList.remove('show');
 }
 
+/**
+ * Autocompleta los campos del formulario con datos de un producto
+ * @param {Object} producto - Objeto producto con datos
+ * @returns {void}
+ */
 export function autocompletarProducto(producto) {
     elementos.nombreProducto.value = producto.nombre;
     elementos.precioProducto.value = producto.precio.toFixed(2);
@@ -152,6 +199,13 @@ export function autocompletarProducto(producto) {
     elementos.cantidadProducto.focus();
 }
 
+/**
+ * Renderiza los items de recepción en la lista
+ * @param {Array<Object>} items - Array de items recibidos
+ * @param {Array<Categoria>} categorias - Array de categorías para referencia
+ * @param {Function} onEliminarCallback - Función callback cuando se elimina un item
+ * @returns {void}
+ */
 export function renderizarItems(items, categorias, onEliminarCallback) {
     if (items.length === 0) {
         elementos.estadoVacio.style.display = 'block';

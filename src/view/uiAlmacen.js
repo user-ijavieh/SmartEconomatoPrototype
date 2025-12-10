@@ -1,6 +1,15 @@
+/**
+ * @fileoverview Interfaz de usuario del almacén
+ * Proporciona funciones para renderizar y gestionar la tabla de productos
+ * @module view/uiAlmacen
+ */
+
 import { getCategories, getSuppliers } from "../services/apiService.js";
 
-// Funciones para obtener elementos del DOM dinámicamente
+/**
+ * Obtiene la tabla de productos del DOM
+ * @returns {HTMLElement|null} Elemento tbody de la tabla
+ */
 export const getTabla = () => document.querySelector('#tablaProductos tbody');
 export const getResumen = () => document.querySelector('#resumen');
 export const getInputBusqueda = () => document.querySelector('#busqueda');
@@ -10,6 +19,14 @@ export const getHeaderPrecio = () => document.getElementById('headerPrecio');
 export const getHeaderId = () => document.getElementById('headerId');
 export const getHeaderStock = () => document.getElementById('headerStock');
 
+/**
+ * Renderiza la tabla de productos en el DOM
+ * @async
+ * @param {Array<Producto>} datos - Array de productos a mostrar
+ * @param {HTMLElement} tabla - Elemento tbody donde renderizar
+ * @param {HTMLElement} resumen - Elemento donde mostrar el resumen
+ * @returns {Promise<void>}
+ */
 export async function renderizarTabla(datos, tabla, resumen) {
   tabla.innerHTML = '';
   if (datos.length === 0) {
@@ -44,6 +61,11 @@ export async function renderizarTabla(datos, tabla, resumen) {
   resumen.textContent = `Productos mostrados: ${totalProductos} | Valor total del stock: ${valorTotal} €`;
 }
 
+/**
+ * Genera el select de categorías con opciones
+ * @param {Array<Categoria>} categorias - Array de categorías
+ * @returns {void}
+ */
 export function generateCategory(categorias){
   const selectCategoria = document.getElementById("categoriaSelect")
 
@@ -73,6 +95,11 @@ export function generateCategory(categorias){
   })
 }
 
+/**
+ * Carga las categorías desde la API y las renderiza
+ * @async
+ * @returns {Promise<void>}
+ */
 export async function cargarCategoriasDesdeAPI() {
   try {
     console.log('Cargando categorías desde la API...');

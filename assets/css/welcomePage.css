@@ -205,3 +205,213 @@ body {
 .mainContent::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.5);
 }
+
+/** ===== RESPONSIVE ===== */
+
+/* Tablets y pantallas medianas (1024px y menores) */
+@media (max-width: 1024px) {
+    .header {
+        padding: 15px 30px;
+        gap: 15px;
+    }
+
+    .header-logo {
+        width: 60px;
+    }
+
+    .header h1 {
+        font-size: 1.5rem;
+        letter-spacing: 3px;
+    }
+
+    .welcome-title {
+        font-size: 2rem;
+        margin-bottom: 40px;
+        letter-spacing: 2px;
+    }
+
+    .buttonsContainer {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 30px;
+        padding: 0 30px;
+        max-width: 900px;
+    }
+
+    .btn-card {
+        width: 160px;
+        height: 180px;
+        font-size: 1rem;
+        gap: 12px;
+        padding: 15px;
+    }
+
+    .btn-card-icon {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+/* Tablets pequeñas y smartphones grandes (768px y menores) */
+@media (max-width: 768px) {
+    .mainContent {
+        padding-bottom: 20px;
+    }
+
+    .header {
+        padding: 12px 20px;
+        gap: 12px;
+    }
+
+    .header-logo {
+        width: 50px;
+    }
+
+    .header h1 {
+        font-size: 1.2rem;
+        letter-spacing: 2px;
+    }
+
+    .welcome-title {
+        font-size: 1.5rem;
+        margin-bottom: 30px;
+        letter-spacing: 1px;
+        padding: 0 20px;
+    }
+
+    .buttonsContainer {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 20px;
+        padding: 0 20px;
+        max-width: 100%;
+    }
+
+    .btn-card {
+        width: 140px;
+        height: 160px;
+        font-size: 0.9rem;
+        gap: 10px;
+        padding: 12px;
+        border-radius: 15px;
+    }
+
+    .btn-card-icon {
+        width: 45px;
+        height: 45px;
+    }
+
+    .btn-card:hover {
+        transform: translateY(-8px);
+    }
+
+    .btn-card:active {
+        transform: translateY(-4px);
+    }
+}
+
+/* Smartphones pequeños (480px y menores) */
+@media (max-width: 480px) {
+    body {
+        font-size: 14px;
+    }
+
+    .container {
+        height: 100vh;
+    }
+
+    .header {
+        padding: 10px 15px;
+        gap: 10px;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 10;
+    }
+
+    .header-logo {
+        width: 40px;
+    }
+
+    .header h1 {
+        font-size: 1rem;
+        letter-spacing: 1px;
+    }
+
+    .mainContent {
+        padding-top: 70px;
+        padding-bottom: 10px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .welcome-title {
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+        letter-spacing: 0.5px;
+        padding: 0 10px;
+    }
+
+    .buttonsContainer {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        padding: 0 10px;
+        max-width: 100%;
+    }
+
+    .btn-card {
+        width: 100%;
+        max-width: 150px;
+        height: 140px;
+        font-size: 0.8rem;
+        gap: 8px;
+        padding: 10px;
+        border-radius: 12px;
+    }
+
+    .btn-card-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .btn-card:hover {
+        transform: translateY(-6px);
+    }
+
+    .btn-card:active {
+        transform: translateY(-3px);
+    }
+
+    .overlay {
+        background: rgba(184, 75, 68, 0.6);
+    }
+}
+
+/* Ultra smartphones (menos de 360px) */
+@media (max-width: 360px) {
+    .header h1 {
+        font-size: 0.9rem;
+        letter-spacing: 0.5px;
+    }
+
+    .welcome-title {
+        font-size: 1rem;
+        margin-bottom: 15px;
+    }
+
+    .buttonsContainer {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        padding: 0 8px;
+    }
+
+    .btn-card {
+        height: 130px;
+        font-size: 0.75rem;
+        gap: 6px;
+        padding: 8px;
+    }
+
+    .btn-card-icon {
+        width: 35px;
+        height: 35px;
+    }
+}

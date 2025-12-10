@@ -1,4 +1,19 @@
+/**
+ * @fileoverview Servicio de mensajes
+ * Proporciona componentes UI para notificaciones (toasts) y confirmaciones (modales)
+ * @module services/messageService
+ */
+
+/**
+ * Servicio para mostrar notificaciones y diálogos al usuario
+ * Proporciona toasts y confirmaciones modales
+ * @class MessageService
+ */
 class MessageService {
+    /**
+     * Constructor del servicio
+     * Inicializa automáticamente los estilos y contenedores necesarios
+     */
     constructor() {
         this.toastContainer = null;
         this.modalOverlay = null;
@@ -6,6 +21,11 @@ class MessageService {
         this.autoInit();
     }
 
+    /**
+     * Inicialización automática del servicio
+     * Carga estilos CSS e inyecta elementos HTML necesarios
+     * @private
+     */
     autoInit() {
         if (this.initialized) return;
 
@@ -29,6 +49,10 @@ class MessageService {
         this.initialized = true;
     }
 
+    /**
+     * Carga el archivo CSS de variables
+     * @private
+     */
     linkVariablesStyles() {
         const link = document.createElement('link');
         link.id = 'message-service-styles-vars';
@@ -37,6 +61,10 @@ class MessageService {
         document.head.appendChild(link);
     }
 
+    /**
+     * Carga el archivo CSS del servicio de mensajes
+     * @private
+     */
     linkStyles() {
         const link = document.createElement('link');
         link.id = 'message-service-styles';
@@ -45,6 +73,10 @@ class MessageService {
         document.head.appendChild(link);
     }
 
+    /**
+     * Inyecta los contenedores HTML necesarios (toast-container y modal-overlay)
+     * @private
+     */
     injectHTML() {
         // Toast Container
         const toastContainer = document.createElement('div');
@@ -57,6 +89,13 @@ class MessageService {
         document.body.appendChild(modalOverlay);
     }
 
+    /**
+     * Muestra un toast (notificación) con el tipo y duración especificados
+     * @private
+     * @param {string} message - Mensaje a mostrar
+     * @param {string} type - Tipo de notificación ('success', 'error', 'warning')
+     * @param {number} [duration=3000] - Duración en milisegundos
+     */
     showToast(message, type, duration = 3000) {
         const toast = document.createElement('div');
         toast.className = `toast toast-${type}`;
@@ -79,14 +118,36 @@ class MessageService {
         }, duration);
     }
 
+    /**
+     * Muestra un toast de éxito
+     * @param {string} message - Mensaje a mostrar
+     * @param {number} [duration=3000] - Duración en milisegundos
+     * @returns {void}
+     */
     showSuccess(message, duration = 3000) {
         this.showToast(message, 'success', duration);
     }
 
+    /**
+     * Muestra un toast de error
+     * @param {string} message - Mensaje a mostrar
+     * @param {number} [duration=3000] - Duración en milisegundos
+     * @returns {void}
+     */
     showError(message, duration = 3000) {
         this.showToast(message, 'error', duration);
     }
 
+    /**
+     * Muestra un diálogo de confirmación modal
+     * @async
+     * @param {string} message - Mensaje de confirmación a mostrar
+     * @param {Object} [options={}] - Opciones de configuración
+     * @param {string} [options.title='Confirmación'] - Título del modal
+     * @param {string} [options.confirmText='Confirmar'] - Texto del botón de confirmación
+     * @param {string} [options.cancelText='Cancelar'] - Texto del botón de cancelación
+     * @returns {Promise<boolean>} true si se confirma, false si se cancela
+     */
     askConfirmation(message, options = {}) {
         return new Promise((resolve) => {
             const {
@@ -173,5 +234,9 @@ class MessageService {
     }
 }
 
-// Exportar una instancia singleton del servicio
+/**
+ * Instancia singleton del servicio de mensajes
+ * Exportada para uso en toda la aplicación
+ * @type {MessageService}
+ */
 export const messageService = new MessageService();

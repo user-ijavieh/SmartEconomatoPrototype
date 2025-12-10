@@ -1,16 +1,27 @@
+/**
+ * @fileoverview Controlador principal de la aplicación
+ * Maneja la navegación, sidebar, autenticación y eventos globales
+ * @module controllers/mainController/mainController
+ */
+
 import { ROUTER } from "../../router/router.js";
 import { toggleSidebar } from './sidebarController.js'
 import { renderToggleSidebar, renderToggleSubMenu } from '../../view/uiMain.js'
 import { AuthService } from '../../services/authService.js'
 import { messageService } from '../../services/messageService.js'
 
-// Verificar autenticación al cargar la página
+/**
+ * Verifica autenticación al cargar la página
+ * Si no está autenticado, redirige al login
+ */
 if (!AuthService.isAuthenticated()) {
   console.warn('Usuario no autenticado, redirigiendo al login...');
   window.location.href = '../../login.html';
 }
 
-// Event Listeners
+/**
+ * Inicializa event listeners cuando el DOM está cargado
+ */
 document.addEventListener('DOMContentLoaded', () => {
   const toggleButton = document.getElementById('toggle-btn')
   const dropdownBtns = document.querySelectorAll('.dropdown-btn')

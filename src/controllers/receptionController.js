@@ -1,3 +1,9 @@
+/**
+ * @fileoverview Controlador de recepción de productos
+ * Maneja la recepción de nuevos productos en el almacén
+ * @module controllers/receptionController
+ */
+
 import { getProducts, getSuppliers, createProduct, getCategories } from '../services/apiService.js';
 import { messageService } from '../services/messageService.js';
 import * as uiReception from '../view/uiReception.js';
@@ -9,6 +15,13 @@ let todasLasCategorias = [];
 let itemsRecepcion = [];
 let productoSeleccionado = null;
 
+/**
+ * Inicializa el controlador de recepción
+ * Carga datos y configura event listeners
+ * @async
+ * @returns {Promise<void>}
+ * @throws {Error} Si hay error al cargar el módulo
+ */
 export async function init() {
     try {
         uiReception.obtenerReferenciasDOM();
@@ -22,6 +35,12 @@ export async function init() {
     }
 }
 
+/**
+ * Carga todos los datos necesarios (productos, proveedores, categorías)
+ * @async
+ * @returns {Promise<void>}
+ * @throws {Error} Si falla la carga de datos
+ */
 async function cargarDatos() {
     try {
         const [productos, proveedores, categorias] = await Promise.all([
@@ -53,6 +72,10 @@ async function cargarDatos() {
     }
 }
 
+/**
+ * Configura todos los event listeners de la página
+ * @returns {void}
+ */
 function configurarEventListeners() {
     uiReception.elementos.btnAgregarItem.addEventListener('click', abrirFormulario);
     uiReception.elementos.btnGuardarRecepcion.addEventListener('click', guardarRecepcion);
@@ -83,17 +106,29 @@ function configurarEventListeners() {
     uiReception.elementos.precioProducto.addEventListener('input', calcularTotal);
 }
 
+/**
+ * Abre el formulario para agregar un nuevo item
+ * @returns {void}
+ */
 function abrirFormulario() {
     uiReception.abrirFormulario();
     productoSeleccionado = null;
 }
 
+/**
+ * Cierra el formulario y limpia los campos
+ * @returns {void}
+ */
 function cerrarFormulario() {
     uiReception.cerrarFormulario();
     uiReception.ocultarDropdown();
     productoSeleccionado = null;
 }
 
+/**
+ * Filtra productos según el término de búsqueda
+ * @returns {void}
+ */
 function filtrarProductos() {
     if (!uiReception.elementos.nombreProducto) {
         return;
@@ -115,6 +150,11 @@ function filtrarProductos() {
     uiReception.mostrarDropdown(productosFiltrados, seleccionarProducto);
 }
 
+/**
+ * Selecciona un producto del dropdown de autocompletado
+ * @param {number|string} productoId - ID del producto a seleccionar
+ * @returns {void}
+ */
 function seleccionarProducto(productoId) {
     const producto = todosLosProductos.find(p => p.id === productoId);
     
@@ -124,12 +164,21 @@ function seleccionarProducto(productoId) {
     }
 }
 
+/**
+ * Calcula el total del item (cantidad x precio)
+ * @returns {void}
+ */
 function calcularTotal() {
     const cantidad = parseFloat(uiReception.elementos.cantidadProducto.value) || 0;
     const precio = parseFloat(uiReception.elementos.precioProducto.value) || 0;
     const total = cantidad * precio;
 }
 
+/**
+ * Maneja el envío del formulario para agregar un item
+ * @param {Event} e - Evento del formulario
+ * @returns {void}
+ */
 function agregarItem(e) {
     e.preventDefault();
     
@@ -171,6 +220,10 @@ function agregarItem(e) {
     agregarItemConfirmado(producto, nombreProducto, cantidad, precio, proveedor, proveedorId, categoriaId, notas, true);
 }
 
+/**
+ * Calcula el próximo ID de producto
+ * @returns {number} Siguiente ID disponible
+ */
 function calcularProximoIdProducto() {
     if (todosLosProductos.length === 0) {
         return 1;
@@ -184,6 +237,17 @@ function calcularProximoIdProducto() {
     return maxId + 1;
 }
 
+/**
+ * Pide confirmación para crear un producto nuevo
+ * @async
+ * @param {string} nombreProducto - Nombre del nuevo producto
+ * @param {number} cantidad - Cantidad a recibir
+ * @param {number} precio - Precio unitario
+ * @param {Object} proveedor - Objeto del proveedor
+ * @param {number} categoriaId - ID de la categoría
+ * @param {string} notas - Notas adicionales
+ * @returns {Promise<void>}
+ */
 async function confirmarProductoNuevo(nombreProducto, cantidad, precio, proveedor, categoriaId, notas) {
     const confirmado = await messageService.askConfirmation(
         `El producto "${nombreProducto}" no existe en el sistema.\n\n¿Deseas crear un nuevo producto con estos datos?\n\nCantidad: ${cantidad}\nPrecio: €${precio.toFixed(2)}\nProveedor: ${proveedor.nombre}`,
@@ -199,6 +263,19 @@ async function confirmarProductoNuevo(nombreProducto, cantidad, precio, proveedo
     }
 }
 
+/**
+ * Agrega el item confirmado a la lista de recepción
+ * @param {Object|null} producto - Objeto producto existente o null
+ * @param {string} nombreProducto - Nombre del producto
+ * @param {number} cantidad - Cantidad recibida
+ * @param {number} precio - Precio unitario
+ * @param {Object} proveedor - Objeto del proveedor
+ * @param {number} proveedorId - ID del proveedor
+ * @param {number} categoriaId - ID de la categoría
+ * @param {string} notas - Notas adicionales
+ * @param {boolean} productoExistente - Si el producto ya existe en el sistema
+ * @returns {void}
+ */
 function agregarItemConfirmado(producto, nombreProducto, cantidad, precio, proveedor, proveedorId, categoriaId, notas, productoExistente) {
 
     const nuevoItem = {
@@ -225,10 +302,19 @@ function agregarItemConfirmado(producto, nombreProducto, cantidad, precio, prove
     messageService.showSuccess('Item agregado correctamente');
 }
 
+/**
+ * Renderiza los items de recepción en la interfaz
+ * @returns {void}
+ */
 function renderizarItems() {
     uiReception.renderizarItems(itemsRecepcion, todasLasCategorias, eliminarItem);
 }
 
+/**
+ * Elimina un item de la lista de recepción por índice
+ * @param {number} index - Índice del item a eliminar
+ * @returns {void}
+ */
 export function eliminarItem(index) {
     if (index < 0 || index >= itemsRecepcion.length) return;
     
@@ -239,11 +325,21 @@ export function eliminarItem(index) {
     messageService.showSuccess('Item eliminado');
 }
 
+/**
+ * Actualiza el estado de los botones según si hay items
+ * @returns {void}
+ */
 function actualizarEstadoBotones() {
     const hayItems = itemsRecepcion.length > 0;
     uiReception.actualizarEstadoBotones(hayItems);
 }
 
+/**
+ * Guarda la recepción completada
+ * Crea los productos nuevos en la API si es necesario
+ * @async
+ * @returns {Promise<void>}
+ */
 async function guardarRecepcion() {
     if (itemsRecepcion.length === 0) {
         messageService.showError('No hay items para guardar');

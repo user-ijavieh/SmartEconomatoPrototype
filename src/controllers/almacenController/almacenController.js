@@ -1,21 +1,27 @@
+/**
+ * @fileoverview Controlador del almacén
+ * Maneja la carga, visualización y filtrado de productos
+ * @module controllers/almacenController/almacenController
+ */
+
 //* Modelos
 import { Producto } from '../../models/productos.js';
 import { Proveedor } from '../../models/proveedores.js';
 import { Categoria } from '../../models/categorias.js';
-import { renderizarTabla, cargarCategoriasDesdeAPI, cargarProveedoresEnFormulario, getTabla, getResumen, getControles, getInputBusqueda, getSelectCategoria, getHeaderPrecio, getHeaderId, getHeaderStock } from '../../view/uiAlmacen.js';
+import { cargarCategoriasDesdeAPI, cargarProveedoresEnFormulario, renderizarTabla, getTabla, getResumen } from '../../view/uiAlmacen.js';
 
 //* Funciones de la API
 import { getProducts , getSuppliers , getCategories } from '../../services/apiService.js'
 
-//* Mas cosas
-
-import { manejarBusqueda, manejarFiltro, manejarOrden, manejarStock, manejarMostrarTodos } from '../../utils/funciones.js';
-
 //* Controlador del formulario
 import { initFormProducto } from './formProductoController.js';
 
-//* Método para cargar todos los productos
-
+/**
+ * Carga todos los productos desde la API y los modela
+ * @async
+ * @returns {Promise<Array<Producto>>} Array de productos modelados
+ * @throws {Error} Si hay error al conectar con la API
+ */
 export const loadProducts = async () => {
     const productosCrudos = await getProducts()
     const categorias = await loadCategories()
@@ -47,8 +53,12 @@ export const loadProducts = async () => {
     return productosModelados
 }
 
-//* Método para cargar las categorias
-
+/**
+ * Carga todas las categorías desde la API y las modela
+ * @async
+ * @returns {Promise<Array<Categoria>>} Array de categorías modeladas
+ * @throws {Error} Si hay error al conectar con la API
+ */
 export const loadCategories = async () => {
     const categoriasCrudas = await getCategories()
 
@@ -64,8 +74,12 @@ export const loadCategories = async () => {
     return categoriasModeladas
 }
 
-//* Método para cargar los proveedores
-
+/**
+ * Carga todos los proveedores desde la API y los modela
+ * @async
+ * @returns {Promise<Array<Proveedor>>} Array de proveedores modelados
+ * @throws {Error} Si hay error al conectar con la API
+ */
 export const loadSuppliers = async () => {
     const proveedoresCrudos = await getSuppliers()
 
@@ -89,6 +103,8 @@ let productosMostrados = [];
 
 /**
  * Alterna la visibilidad del formulario de nuevo producto
+ * Limpia el formulario cuando se oculta
+ * @returns {void}
  */
 function toggleFormularioProducto() {
     const formulario = document.getElementById('formularioNuevoProducto');
@@ -103,154 +119,84 @@ function toggleFormularioProducto() {
     }
 }
 
+/**
+ * Inicializa el controlador del almacén
+ * Carga productos, categorías, proveedores y configura event listeners
+ * @async
+ * @returns {Promise<void>}
+ * @throws {Error} Si hay error durante la inicialización
+ */
 // Función de inicialización
 export async function init() {
     try {
-        const tabla = getTabla();
-        const resumen = getResumen();
-        const controles = getControles();
-        const inputBusqueda = getInputBusqueda();
-        const selectCategoria = getSelectCategoria();
-        const headerPrecio = getHeaderPrecio();
-        const headerId = getHeaderId();
-        const headerStock = getHeaderStock();
-
         // Cargar productos
         productosMostrados = await loadProducts();
 
-        // Inicialización de la tabla
-        renderizarTabla(productosMostrados, tabla, resumen);
-
-        // Cargar categorías en el selector desde la API
+        // Cargar categorías y proveedores
         await cargarCategoriasDesdeAPI();
-        
-        // Cargar proveedores en el formulario
         await cargarProveedoresEnFormulario();
 
-        // Definición de todas las acciones en cada evento
-        const acciones = {
-            btnBuscar: () => {
-                const resultadoBusqueda = manejarBusqueda(productosMostrados, inputBusqueda);
-                renderizarTabla(resultadoBusqueda ? resultadoBusqueda : [], tabla, resumen);
-            },
-            btnFiltrarCategoria: () => {
-                const resultadoFiltro = manejarFiltro(productosMostrados, selectCategoria);
-                renderizarTabla(resultadoFiltro ? resultadoFiltro : [], tabla, resumen);
-            },
-            btnStock: () => {
-                const resultadoStock = manejarStock(productosMostrados)
-                renderizarTabla(resultadoStock ? resultadoStock : [], tabla, resumen);
-            },
-            btnMostrarTodos: () => {
-                const resultadoMostrar = manejarMostrarTodos(selectCategoria, inputBusqueda, productosMostrados);
-                renderizarTabla(resultadoMostrar ? resultadoMostrar : [], tabla, resumen);
-            },
-            btnAgregarProducto: () => {
+        // Renderizar tabla
+        const tabla = getTabla();
+        const resumen = getResumen();
+        await renderizarTabla(productosMostrados, tabla, resumen);
+
+        // Referencias a elementos
+        const controles = document.querySelector('.controles');
+        const inputBusqueda = document.getElementById('busqueda');
+        const selectCategoria = document.getElementById('categoriaSelect');
+        
+        if (!controles) {
+            console.error('No se encontró el elemento .controles');
+            return;
+        }
+
+        // Eventos de botones
+        controles.addEventListener('click', (e) => {
+            const btnId = e.target.id;
+
+            if (btnId === 'btnBuscar') {
+                const termino = inputBusqueda.value.toLowerCase().trim();
+                const filtrados = termino 
+                    ? productosMostrados.filter(p =>
+                        p.nombre.toLowerCase().includes(termino) ||
+                        p.categoria?.nombre.toLowerCase().includes(termino) ||
+                        p.proveedor?.nombre.toLowerCase().includes(termino)
+                    )
+                    : productosMostrados;
+                renderizarTabla(filtrados, tabla, resumen);
+            }
+
+            if (btnId === 'btnFiltrarCategoria') {
+                const cat = selectCategoria.value;
+                const filtrados = cat 
+                    ? productosMostrados.filter(p => p.categoria?.nombre === cat)
+                    : productosMostrados;
+                renderizarTabla(filtrados, tabla, resumen);
+            }
+
+            if (btnId === 'btnStock') {
+                const stockBajo = productosMostrados.filter(p => p.stock <= p.stockMinimo);
+                renderizarTabla(stockBajo, tabla, resumen);
+            }
+
+            if (btnId === 'btnMostrarTodos') {
+                inputBusqueda.value = '';
+                selectCategoria.value = '';
+                renderizarTabla(productosMostrados, tabla, resumen);
+            }
+
+            if (btnId === 'btnAgregarProducto') {
                 toggleFormularioProducto();
             }
-        };
-
-        // Controlador de eventos para los botones
-        controles.addEventListener('click', (e) => {
-            const accion = acciones[e.target.id];
-            if (accion) accion();
         });
 
-        // Event listener para ordenamiento por precio
-        headerPrecio.addEventListener('click', () => {
-            let direccionActual = headerPrecio.getAttribute('data-sort-dir') || 'none';
-            let nuevaDireccion = 'asc';
-
-            if (direccionActual === 'asc') {
-                nuevaDireccion = 'desc';
-            } else if (direccionActual === 'desc') {
-                nuevaDireccion = 'asc';
-            }
-
-            // Resetear otros indicadores
-            headerId.setAttribute('data-sort-dir', 'none');
-            headerStock.setAttribute('data-sort-dir', 'none');
-
-            headerPrecio.setAttribute('data-sort-dir', nuevaDireccion);
-            productosMostrados.sort((a, b) => {
-                const precioA = a.precio;
-                const precioB = b.precio;
-
-                if (nuevaDireccion === 'asc') {
-                    return precioA - precioB;
-                } else {
-                    return precioB - precioA;
-                }
-            });
-
-            renderizarTabla(productosMostrados, tabla, resumen);
-        });
-
-        // Event listener para ordenamiento por ID
-        headerId.addEventListener('click', () => {
-            let direccionActual = headerId.getAttribute('data-sort-dir') || 'none';
-            let nuevaDireccion = 'asc';
-
-            if (direccionActual === 'asc') {
-                nuevaDireccion = 'desc';
-            } else if (direccionActual === 'desc') {
-                nuevaDireccion = 'asc';
-            }
-
-            // Resetear otros indicadores
-            headerPrecio.setAttribute('data-sort-dir', 'none');
-            headerStock.setAttribute('data-sort-dir', 'none');
-
-            headerId.setAttribute('data-sort-dir', nuevaDireccion);
-            productosMostrados.sort((a, b) => {
-                const idA = a.id;
-                const idB = b.id;
-
-                if (nuevaDireccion === 'asc') {
-                    return idA - idB;
-                } else {
-                    return idB - idA;
-                }
-            });
-
-            renderizarTabla(productosMostrados, tabla, resumen);
-        });
-
-        // Event listener para ordenamiento por Stock
-        headerStock.addEventListener('click', () => {
-            let direccionActual = headerStock.getAttribute('data-sort-dir') || 'none';
-            let nuevaDireccion = 'asc';
-
-            if (direccionActual === 'asc') {
-                nuevaDireccion = 'desc';
-            } else if (direccionActual === 'desc') {
-                nuevaDireccion = 'asc';
-            }
-
-            // Resetear otros indicadores
-            headerPrecio.setAttribute('data-sort-dir', 'none');
-            headerId.setAttribute('data-sort-dir', 'none');
-
-            headerStock.setAttribute('data-sort-dir', nuevaDireccion);
-            productosMostrados.sort((a, b) => {
-                const stockA = a.stock;
-                const stockB = b.stock;
-
-                if (nuevaDireccion === 'asc') {
-                    return stockA - stockB;
-                } else {
-                    return stockB - stockA;
-                }
-            });
-
-            renderizarTabla(productosMostrados, tabla, resumen);
-        });
-
-        // Inicializar el controlador del formulario de productos
+        // Inicializar formulario de productos
         initFormProducto(
             toggleFormularioProducto,
-            (productosActualizados) => {
-                productosMostrados = productosActualizados;
+            async () => {
+                productosMostrados = await loadProducts();
+                await renderizarTabla(productosMostrados, tabla, resumen);
             }
         );
 

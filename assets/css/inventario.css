@@ -190,24 +190,20 @@ body::-webkit-scrollbar-thumb:hover,
 }
 
 
-
-/* Para que se vea clickable */
-
-
 .tabla-contenedor th.sortable {
     cursor: pointer;
     position: relative;
 }
 
 .tabla-contenedor th.sortable[data-sort-dir="asc"]::after {
-    content: ' ▲';
+    content: ' Ôû▓';
     font-size: 0.8em;
     color: #4CAF50;
 }
 
 
 .tabla-contenedor th.sortable[data-sort-dir="desc"]::after {
-    content: ' ▼';
+    content: ' Ôû╝';
     font-size: 0.8em;
     color: #f44336;
 }
