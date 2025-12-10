@@ -1,6 +1,6 @@
 @import url("./variables.css");
 
-/* ===== LOADER ANIMATION ===== */
+/** ===== LOADER ANIMATION ===== */
 
 .loader {
   width: 40px;
@@ -37,7 +37,7 @@
   100% { top: -0.1px; }
 }
 
-/* ===== LOADER CONTAINER ===== */
+/** ===== LOADER CONTAINER ===== */
 
 .loader-container {
   position: fixed;

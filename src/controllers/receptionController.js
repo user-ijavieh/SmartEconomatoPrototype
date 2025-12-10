@@ -16,6 +16,37 @@ let itemsRecepcion = [];
 let productoSeleccionado = null;
 
 /**
+ * Guarda los items de recepción en localStorage
+ * @returns {void}
+ */
+function guardarItemsEnLocalStorage() {
+    try {
+        localStorage.setItem('itemsRecepcion', JSON.stringify(itemsRecepcion));
+    } catch (error) {
+        console.error('Error al guardar items en localStorage:', error);
+        messageService.showError('Error al guardar los datos temporalmente');
+    }
+}
+
+/**
+ * Carga los items de recepción desde localStorage
+ * @returns {void}
+ */
+function cargarItemsDesdeLocalStorage() {
+    try {
+        const itemsGuardados = localStorage.getItem('itemsRecepcion');
+        if (itemsGuardados) {
+            itemsRecepcion = JSON.parse(itemsGuardados);
+            renderizarItems();
+            actualizarEstadoBotones();
+        }
+    } catch (error) {
+        console.error('Error al cargar items desde localStorage:', error);
+        itemsRecepcion = [];
+    }
+}
+
+/**
  * Inicializa el controlador de recepción
  * Carga datos y configura event listeners
  * @async
@@ -27,6 +58,9 @@ export async function init() {
         uiReception.obtenerReferenciasDOM();
         
         await cargarDatos();
+        
+        // Cargar items guardados en localStorage
+        cargarItemsDesdeLocalStorage();
 
         configurarEventListeners();
         
@@ -68,6 +102,7 @@ async function cargarDatos() {
         
     } catch (error) {
         console.error('Error al cargar datos:', error);
+        messageService.showError('Error al cargar datos del servidor');
         throw error;
     }
 }
@@ -84,7 +119,6 @@ function configurarEventListeners() {
     
     if (uiReception.elementos.nombreProducto) {
         uiReception.elementos.nombreProducto.addEventListener('input', (e) => {
-            console.log('⌨️ Input event disparado, valor:', e.target.value);
             filtrarProductos();
         });
         
@@ -295,6 +329,9 @@ function agregarItemConfirmado(producto, nombreProducto, cantidad, precio, prove
 
     itemsRecepcion.push(nuevoItem);
     
+    // Guardar en localStorage
+    guardarItemsEnLocalStorage();
+    
     renderizarItems();
     actualizarEstadoBotones();
     
@@ -319,6 +356,10 @@ export function eliminarItem(index) {
     if (index < 0 || index >= itemsRecepcion.length) return;
     
     itemsRecepcion.splice(index, 1);
+    
+    // Guardar en localStorage
+    guardarItemsEnLocalStorage();
+    
     renderizarItems();
     actualizarEstadoBotones();
     
@@ -448,6 +489,10 @@ async function guardarRecepcion() {
         messageService.showSuccess(mensajeExito, 5000);
         
         itemsRecepcion = [];
+        
+        // Limpiar localStorage
+        localStorage.removeItem('itemsRecepcion');
+        
         renderizarItems();
         actualizarEstadoBotones();
         

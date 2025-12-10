@@ -1488,6 +1488,24 @@
         "id": 3,
         "nombre": "Carnicerías Selectas del Norte"
       }
+    },
+    {
+      "id": "51",
+      "nombre": "sadsdsad",
+      "precio": 2,
+      "precioUnitario": "kg",
+      "stock": 5,
+      "stockMinimo": 10,
+      "categoriaId": "11",
+      "proveedorId": "2",
+      "unidadMedida": "kg",
+      "marca": "",
+      "codigoBarras": "",
+      "fechaCaducidad": "",
+      "alergenos": [],
+      "descripcion": "",
+      "imagen": "",
+      "activo": true
     }
   ]
 }

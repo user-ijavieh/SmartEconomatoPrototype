@@ -1,5 +1,7 @@
 @import url("./variables.css");
 
+/** ===== TOAST CONTAINER ===== */
+
 #toast-container {
     position: fixed;
     top: 20px;
@@ -62,6 +64,8 @@
     word-wrap: break-word;
 }
 
+/** ===== ANIMACIONES TOAST ===== */
+
 @keyframes slideInRight {
     from {
         transform: translateX(100%);
@@ -84,6 +88,8 @@
     }
 }
 
+/** ===== MODAL OVERLAY ===== */
+
 #modal-overlay {
     position: fixed;
     top: 0;
@@ -101,6 +107,8 @@
 #modal-overlay.active {
     display: flex;
 }
+
+/** ===== MODAL BOX ===== */
 
 /* Modal Box Container */
 .modal-box {
@@ -152,9 +160,7 @@
     justify-content: flex-end;
 }
 
-/*! ===============
-/*! Botones modal
-/*! =============== */
+/** ===== BOTONES MODAL ===== */
 
 .modal-btn {
     padding: 12px 24px;
@@ -202,9 +208,7 @@
     transform: translateY(0);
 }
 
-/*! ========================================
-/*!   Animaciones modal
-/*! ======================================== */
+/** ===== ANIMACIONES MODAL ===== */
 
 @keyframes fadeIn {
     from {
@@ -226,9 +230,7 @@
     }
 }
 
-/* ========================================
-   RESPONSIVE DESIGN
-   ======================================== */
+/** ===== RESPONSIVE ===== */
 
 @media (max-width: 768px) {
     /* Toast en móviles */
@@ -267,9 +269,7 @@
     }
 }
 
-/* ========================================
-   VARIANTES OPCIONALES
-   ======================================== */
+/** ===== VARIANTES OPCIONALES ===== */
 
 /* Toast Info (azul) - Añadir si se necesita */
 .toast.toast-info {

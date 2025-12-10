@@ -1,11 +1,8 @@
 @import url("./variables.css");
 
-@font-face {
-  font-family: 'Deserta';
-  src: url('../fonts/Deserta.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-}
+
+
+/** ===== RESET Y BASE ===== */
 
 *{
   margin: 0;
@@ -22,6 +19,9 @@ body{
   color: var(--text-clr);
   position: relative;
 }
+
+/** ===== SIDEBAR ===== */
+
 #sidebar{
   box-sizing: border-box;
   height: 100vh;
@@ -42,6 +42,9 @@ body{
   padding: 5px;
   width: 60px;
 }
+
+/** ===== MAIN CONTENT ===== */
+
 main{
   margin-left: 250px; 
   transition: margin-left 300ms ease-in-out;
@@ -52,6 +55,9 @@ main{
 #sidebar.close ~ main{
   margin-left: 60px;
 }
+
+/** ===== SIDEBAR NAVEGACIÓN ===== */
+
 #sidebar ul{
   list-style: none;
 }
@@ -123,6 +129,9 @@ main{
 #sidebar .sub-menu a{
   padding-left: 2em;
 }
+
+/** ===== TOGGLE BUTTON ===== */
+
 #toggle-btn{
   margin-left: auto;
   padding: 1em;
@@ -142,6 +151,8 @@ main{
   background-color: var(--hover-clr);
 }
 
+/** ===== CONTENEDOR ===== */
+
 main p{
   color: var(--secondary-text-clr);
   margin-top: 5px;
@@ -155,6 +166,8 @@ main p{
 
   h2, p { margin-top: 1em }
 }
+
+/** ===== RESPONSIVE ===== */
 
 @media(max-width: 800px){
   body{

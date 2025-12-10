@@ -12,6 +12,8 @@ html, body {
     overflow: hidden;
 }
 
+/** ===== BODY ===== */
+
 body {
     height: 100vh;
     font-family: 'Deserta', sans-serif;
@@ -53,7 +55,7 @@ body {
     opacity: 1;
 }
 
-/**  OVERLAY  */
+/** ===== OVERLAY ===== */
 
 .overlay {
     position: absolute;

@@ -8,21 +8,13 @@
 import { Producto } from '../../models/productos.js';
 import { Proveedor } from '../../models/proveedores.js';
 import { Categoria } from '../../models/categorias.js';
+import { cargarCategoriasDesdeAPI, cargarProveedoresEnFormulario, renderizarTabla, getTabla, getResumen } from '../../view/uiOrders.js';
 
 //* Funciones de la API
 import { getProducts , getSuppliers , getCategories } from '../../services/apiService.js'
 
-import { Grid } from "https://unpkg.com/gridjs?module";
-
-//* Vista
-import { cargarCategoriasDesdeAPI, cargarProveedoresEnFormulario } from '../../view/uiAlmacen.js';
-
 //* Controlador del formulario
 import { initFormProducto } from './formProductoController.js';
-
-// Variable que almacena los productos mostrados
-let productosMostrados = [];
-let gridInstance = null;
 
 /**
  * Carga todos los productos desde la API y los modela
@@ -57,6 +49,7 @@ export const loadProducts = async () => {
             data.activo
         )
     })
+    console.log(productosModelados)
     return productosModelados
 }
 
@@ -105,6 +98,9 @@ export const loadSuppliers = async () => {
     return proveedoresModelados
 }
 
+// Variable que almacena los productos mostrados
+let productosMostrados = [];
+
 /**
  * Alterna la visibilidad del formulario de nuevo producto
  * Limpia el formulario cuando se oculta
@@ -124,24 +120,6 @@ function toggleFormularioProducto() {
 }
 
 /**
- * Limpia todos los filtros aplicados en la tabla
- * @returns {void}
- */
-function limpiarFiltros() {
-    if (gridInstance) {
-        gridInstance.updateConfig({
-            data: formatearDatosParaGrid(productosMostrados)
-        }).forceRender();
-        
-        // Limpiar el campo de búsqueda de Grid.js
-        const searchInput = document.querySelector('.gridjs-search-input');
-        if (searchInput) {
-            searchInput.value = '';
-        }
-    }
-}
-
-/**
  * Inicializa el controlador del almacén
  * Carga productos, categorías, proveedores y configura event listeners
  * @async
@@ -151,69 +129,74 @@ function limpiarFiltros() {
 // Función de inicialización
 export async function init() {
     try {
-        // Referencias del DOM
-        const btnAgregarProducto = document.querySelector('#btnAgregarProducto');
-        const btnLimpiarFiltros = document.querySelector('#btnLimpiarFiltros');
-        
         // Cargar productos
         productosMostrados = await loadProducts();
 
-        // Cargar categorías y proveedores en el formulario
+        // Cargar categorías y proveedores
         await cargarCategoriasDesdeAPI();
         await cargarProveedoresEnFormulario();
 
-        gridInstance = new Grid({
-            columns: ["ID", "Nombre", "Categoría", "Precio", "Stock", "Mínimo", "Proveedor"],
-            data: formatearDatosParaGrid(productosMostrados),
-            pagination: {
-                limit: 20,
-                summary: true
-            },
-            search: {
-                enabled: true,
-                placeholder: 'Buscar producto...'
-            },
-            sort: true,
-            fixedHeader: true,
-            height: '500px',
-            language: {
-                'search': { 'placeholder': 'Buscar producto...' },
-                'pagination': {
-                    'previous': 'Anterior',
-                    'next': 'Siguiente',
-                    'showing': 'Mostrando',
-                    'results': () => 'resultados'
-                }
-            },
-            style: { 
-                table: { 
-                    'width': '100%' 
-                },
-                th: {
-                    'background-color': 'var(--primary-color, #2c3e50)',
-                    'color': 'white'
-                }
+        // Renderizar tabla
+        const tabla = getTabla();
+        const resumen = getResumen();
+        await renderizarTabla(productosMostrados, tabla, resumen);
+
+        // Referencias a elementos
+        const controles = document.querySelector('.controles');
+        const inputBusqueda = document.getElementById('busqueda');
+        const selectCategoria = document.getElementById('categoriaSelect');
+        
+        if (!controles) {
+            console.error('No se encontró el elemento .controles');
+            return;
+        }
+
+        // Eventos de botones
+        controles.addEventListener('click', (e) => {
+            const btnId = e.target.id;
+
+            if (btnId === 'btnBuscar') {
+                const termino = inputBusqueda.value.toLowerCase().trim();
+                const filtrados = termino 
+                    ? productosMostrados.filter(p =>
+                        p.nombre.toLowerCase().includes(termino) ||
+                        p.categoria?.nombre.toLowerCase().includes(termino) ||
+                        p.proveedor?.nombre.toLowerCase().includes(termino)
+                    )
+                    : productosMostrados;
+                renderizarTabla(filtrados, tabla, resumen);
             }
-        }).render(document.getElementById("wrapper-tabla-productos"));
 
-        // Evento del botón agregar producto
-        if (btnAgregarProducto) {
-            btnAgregarProducto.addEventListener('click', toggleFormularioProducto);
-        }
+            if (btnId === 'btnFiltrarCategoria') {
+                const cat = selectCategoria.value;
+                const filtrados = cat 
+                    ? productosMostrados.filter(p => p.categoria?.nombre === cat)
+                    : productosMostrados;
+                renderizarTabla(filtrados, tabla, resumen);
+            }
 
-        // Evento del botón limpiar filtros
-        if (btnLimpiarFiltros) {
-            btnLimpiarFiltros.addEventListener('click', limpiarFiltros);
-        }
+            if (btnId === 'btnStock') {
+                const stockBajo = productosMostrados.filter(p => p.stock <= p.stockMinimo);
+                renderizarTabla(stockBajo, tabla, resumen);
+            }
+
+            if (btnId === 'btnMostrarTodos') {
+                inputBusqueda.value = '';
+                selectCategoria.value = '';
+                renderizarTabla(productosMostrados, tabla, resumen);
+            }
+
+            if (btnId === 'btnAgregarProducto') {
+                toggleFormularioProducto();
+            }
+        });
 
         // Inicializar formulario de productos
         initFormProducto(
             toggleFormularioProducto,
             async () => {
                 productosMostrados = await loadProducts();
-                gridInstance.updateConfig({
-                    data: formatearDatosParaGrid(productosMostrados)
-                }).forceRender();
+                await renderizarTabla(productosMostrados, tabla, resumen);
             }
         );
 
@@ -221,16 +204,3 @@ export async function init() {
         console.error('Error inicializando almacenController:', error);
     }
 }
-
-// Función auxiliar para formatear tus objetos Producto al formato de Grid.js
-const formatearDatosParaGrid = (productos) => {
-    return productos.map(p => [
-        p.id,
-        p.nombre,
-        p.categoria?.nombre || 'Sin cat',
-        `${p.precio.toFixed(2)} €`,
-        p.stock,
-        p.stockMinimo,
-        p.proveedor?.nombre || 'Sin prov'
-    ]);
-};

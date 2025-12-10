@@ -6,6 +6,7 @@
 
 //* Funciones de la API
 import { loadProducts } from './almacenController.js';
+import { renderizarTabla, getTabla, getResumen } from '../../view/uiOrders.js';
 import { messageService } from '../../services/messageService.js';
 
 // Expresiones regulares para validación
@@ -168,8 +169,13 @@ async function manejarSubmitProducto(toggleFormularioProducto, actualizarProduct
             toggleFormularioProducto();
             document.getElementById('formProducto').reset();
             
-            // Actualizar la lista de productos
-            await actualizarProductosMostrados();
+            // Recargar productos
+            const productosActualizados = await loadProducts();
+            actualizarProductosMostrados(productosActualizados);
+            
+            const tabla = getTabla();
+            const resumen = getResumen();
+            renderizarTabla(productosActualizados, tabla, resumen);
         } else {
             messageService.showError('Error al agregar el producto');
         }

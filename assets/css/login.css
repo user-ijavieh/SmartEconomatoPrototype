@@ -1,5 +1,7 @@
 @import url("./variables.css");
 
+
+
 body{
     background-image: url("../img/loginBackground.jpg");
     background-size: cover; 
@@ -15,6 +17,8 @@ body{
     margin: 0;
 }
 
+/** ===== CONTAINER ===== */
+
 .container {
     display: flex;
     flex-direction: column;
@@ -26,7 +30,7 @@ body{
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Titulo login */
+/** ===== TITULO LOGIN ===== */
 
 .container .title {
     align-self: center;
@@ -40,7 +44,7 @@ body{
     transition: font-size 0.3s ease;
 }
 
-/* Formulario */
+/** ===== FORMULARIO ===== */
 
 .container .login{
     padding-left: 10%;
@@ -97,7 +101,7 @@ body{
     transform: translateY(0);
 }
 
-/* Logos */
+/** ===== lOGOS ===== */
 
 .container .logos {
     display: flex;
